@@ -1,7 +1,6 @@
-![travis-ci](https://travis-ci.org/shopping24/geoip-dbip-rest-api.svg)
-
 db-ip JSON REST api
 ========================
+![travis-ci](https://travis-ci.org/shopping24/geoip-dbip-rest-api.svg)
 
 This project leverages a simple Java webapp that acts as a wrapper around the [db-ip.com geoip databases](https://db-ip.com/db/).
 The database is available at different levels of details (depends on how muc you spend). The basic databases are available
