@@ -117,7 +117,7 @@
                             <goal>exec</goal>
                         </goals>
                         <id>download-dbip-database</id>
-                        <phase>generate-resources</phase>
+                        <phase>pre-integration-test</phase>
                         <configuration>
                             <executable>wget</executable>
                             <arguments>
