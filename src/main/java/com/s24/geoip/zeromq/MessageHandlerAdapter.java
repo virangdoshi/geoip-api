@@ -33,16 +33,21 @@ public class MessageHandlerAdapter implements Runnable {
    public void run() {
 
       // Socket to talk to clients
-      Socket responder = context.socket(ZMQ.REP);
-      responder.setIPv4Only(true);
-      responder.setBacklog(4096);
-      responder.bind(messageHandler.getBinding());
+      Socket socket = context.socket(ZMQ.REP);
+      socket.setIPv4Only(true);
+      socket.setBacklog(4096);
+      socket.bind(messageHandler.getBinding());
+      socket.setReceiveTimeOut(500);
 
       logger.info("{} up and listening on {} ...", messageHandler.getClass().getSimpleName(),
             messageHandler.getBinding());
 
       while (!Thread.currentThread().isInterrupted()) {
-         String request = responder.recvStr();
+         String request = socket.recvStr();
+         
+         if (request == null) {
+            continue;
+         }
 
          try {
             String response = messageHandler.reply(request);
@@ -53,21 +58,22 @@ public class MessageHandlerAdapter implements Runnable {
             logger.debug("{} --> in: [{}] out: [{}] ",
                   messageHandler.getClass().getSimpleName(),
                   request, abbreviate(response));
-            responder.send(response, ZMQ.NOBLOCK);
+            socket.send(response, ZMQ.NOBLOCK);
          } catch (IllegalArgumentException e) {
             logger.warn("{} Caught {}: {}. Sending empty response ...",
                   messageHandler.getClass().getSimpleName(),
                   e.getClass().getSimpleName(),
                   e.getMessage());
-            responder.send(NON_EMPTY_RESPONSE, ZMQ.NOBLOCK);
+            socket.send(NON_EMPTY_RESPONSE, ZMQ.NOBLOCK);
          } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            responder.send(NON_EMPTY_RESPONSE, ZMQ.NOBLOCK);
+            socket.send(NON_EMPTY_RESPONSE, ZMQ.NOBLOCK);
          }
       }
 
-      // We never get here but clean up anyhow
-      responder.close();
+      // clean up
+      logger.info("Closing {} ...", messageHandler.getBinding());
+      socket.close();
    }
 
    protected String abbreviate(String message) {

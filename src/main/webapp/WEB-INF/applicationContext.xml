@@ -22,7 +22,7 @@
         <constructor-arg type="org.springframework.core.io.Resource">
             <jee:jndi-lookup
                 jndi-name="dbip-path"
-                default-value="WEB-INF/db/dbip-city-2015-05.csv.gz" />
+                default-value="WEB-INF/db/dbip-city-latest.csv.gz" />
         </constructor-arg>
     </bean>
     
@@ -32,7 +32,7 @@
         <constructor-arg>
             <jee:jndi-lookup
                 jndi-name="zmq-binding"
-                default-value="tcp://*:15555" />
+                default-value="tcp://*:19000" />
         </constructor-arg>
     </bean>
    

@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ import org.zeromq.ZMQ.Context;
  */
 public class ZeroMqAdapter implements InitializingBean, DisposableBean {
 
+   private final Logger logger = LoggerFactory.getLogger(getClass());
+   
    @Autowired
    private Collection<MessageHandler> handlers;
 
@@ -48,7 +52,8 @@ public class ZeroMqAdapter implements InitializingBean, DisposableBean {
     */
    @Override
    public void destroy() throws Exception {
+      logger.info("Shutting down ømq executor ...");
       executorService.shutdownNow();
-      context.term();
+      logger.info("Done ...");
    }
 }
