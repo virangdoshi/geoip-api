@@ -1,3 +1,5 @@
+![travis-ci](https://travis-ci.org/shopping24/geoip-dbip-rest-api.svg)
+
 db-ip JSON REST api
 ========================
 
