@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -27,46 +28,56 @@ import com.s24.geoip.GeoIpEntryMatch;
 import com.s24.geoip.GeoIpLookupService;
 
 /**
- * 
+ * Provides a Geo Lookup service for IPv4 and IPv6 addresses with the help of DB-IP.
+ *
  * @author Shopping24 GmbH, Torsten Bøgh Köster (@tboeghk)
  */
 @Controller
 public class GeoIpRestController {
 
-   private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-   @Autowired
-   private GeoIpLookupService lookupService;
+    @Autowired
+    private GeoIpLookupService lookupService;
 
-   /**
-    * This is a pretty fuckup, but path matching with ip adresses is a horror in
-    * spring. So we use this for now ...
-    */
-   @RequestMapping(value = "/**", method = RequestMethod.GET)
-   @ResponseStatus(value = HttpStatus.OK)
-   @ResponseBody
-   public GeoIpEntryMatch handleLookup(HttpServletRequest request) {
-      checkNotNull(request, "Pre-condition violated: ip must not be null.");
+    @RequestMapping(value = {"/", "/favicon.ico", "/robots.txt"})
+    public ResponseEntity handleKnownNotFounds() {
+        return ResponseEntity.notFound().build();
+    }
 
-      InetAddress ip = InetAddresses.forString(
-            Iterables.getLast(
-                  Splitter.on('/').omitEmptyStrings().split(request.getRequestURI())));
+    /**
+     * This is a pretty fuckup, but path matching with ip adresses is a horror in spring. So we use this for now ...
+     */
+    @RequestMapping(value = "/**", method = RequestMethod.GET)
+    public ResponseEntity handleLookup(HttpServletRequest request) {
+        checkNotNull(request, "Pre-condition violated: ip must not be null.");
 
-      return new GeoIpEntryMatch(ip, lookupService.lookup(ip));
-   }
+        InetAddress ip = InetAddresses.forString(
+                Iterables.getLast(
+                        Splitter.on('/').omitEmptyStrings().split(request.getRequestURI())));
 
-   @ExceptionHandler(Exception.class)
-   @ResponseBody
-   public ResponseEntity<String> handleException(Exception e) {
-      logger.warn(e.getMessage(), e);
-      return new ResponseEntity<String>("We ran into an error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-   }
+        if (lookupService.lookup(ip) != null) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(new GeoIpEntryMatch(ip, lookupService.lookup(ip)));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-   /**
-    * Initializes data binding.
-    */
-   @InitBinder
-   public void initBinder(WebDataBinder binder) {
-      binder.registerCustomEditor(InetAddress.class, new InetAdressPropertyEditor());
-   }
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleException(Exception e) {
+        logger.warn(e.getMessage(), e);
+        return "We ran into an error: " + e.getMessage();
+    }
+
+    /**
+     * Initializes data binding.
+     */
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(InetAddress.class, new InetAdressPropertyEditor());
+    }
 }
