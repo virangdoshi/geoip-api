@@ -1,4 +1,4 @@
-package com.s24.geoip.zeromq.impl;
+package com.s24.geoip.zeromq;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;

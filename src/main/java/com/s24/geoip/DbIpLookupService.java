@@ -1,4 +1,4 @@
-package com.s24.geoip.impl;
+package com.s24.geoip;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
