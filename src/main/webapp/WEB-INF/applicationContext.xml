@@ -25,15 +25,4 @@
                 default-value="#{ systemProperties['dbip-path'] != null ? systemProperties['dbip-path'] : 'WEB-INF/db/dbip-city-latest.csv.gz' }" />
         </constructor-arg>
     </bean>
-    
-    <!-- ømq -->
-    <bean class="com.s24.geoip.zeromq.ZeroMqAdapter" />
-    <bean class="com.s24.geoip.zeromq.DbIpGeoLocationMessageHandler">
-        <constructor-arg>
-            <jee:jndi-lookup
-                jndi-name="zmq-binding"
-                default-value="#{ systemProperties['zmq-binding'] != null ? systemProperties['zmq-binding'] : 'tcp://*:19000' }" />
-        </constructor-arg>
-    </bean>
-   
 </beans>

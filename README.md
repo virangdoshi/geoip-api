@@ -36,12 +36,6 @@ key `dbip-path`.
 The response above is a response rendered with the full dp-ip database. Use 
 `curl -i http://localhost:8080/dbip-api/ping` as availability monitoring endpoint.
 
-### ØMQ bindings
-
-The project offers ØMQ bindings as well. By default, ØMQ binds to `tcp://*:19000`.
-You can configure the binding by passing the java system property `-Dzmq-binding`
-or configuring the JNDI environment key `zmq-binding`.
-
 ## Building the project
 
 This should install the current version into your local repository
