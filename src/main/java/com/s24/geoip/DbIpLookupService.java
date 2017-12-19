@@ -66,11 +66,7 @@ public class DbIpLookupService implements GeoIpLookupService {
             int i = 0;
             while ((line = reader.readLine()) != null) {
                 GeoIpEntry e = GeoIpEntry.fromLine(line, stringPool);
-                if (e.getStart() instanceof Inet4Address) {
-                    addEntry(e);
-                } else {
-                    addv6Entry(e);
-                }
+                addEntry(e);
                 i++;
 
                 if (i % 100000 == 0) {
@@ -107,11 +103,8 @@ public class DbIpLookupService implements GeoIpLookupService {
     }
 
     private void addEntry(GeoIpEntry entry) {
-        entries.put(entry.getCoercedStart(), entry);
-    }
-
-    private void addv6Entry(GeoIpEntry entry) {
-        ipv6entries.put(entry.getCoercedStart(), entry);
+        TreeMap<Integer, GeoIpEntry> target = entry.isIpv6() ? ipv6entries : entries;
+        target.put(entry.getCoercedStart(), entry);
     }
 
     /**
@@ -123,11 +116,7 @@ public class DbIpLookupService implements GeoIpLookupService {
         this.ipv6entries = new TreeMap<>();
         this.stringPool = new StringPool();
         for (GeoIpEntry entry : entries) {
-            if (entry.getStart() instanceof Inet4Address) {
-                addEntry(entry);
-            } else {
-                addv6Entry(entry);
-            }
+            addEntry(entry);
         }
     }
 }
