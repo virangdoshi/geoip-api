@@ -39,42 +39,36 @@ public class DbIpLookupService implements GeoIpLookupService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final TreeMap<Integer, GeoIpEntry> entries;
     private final TreeMap<Integer, GeoIpEntry> ipv6entries;
-    private final StringPool stringPool;
+    private final DbIpFileParser parser;
 
-    public DbIpLookupService(String dbip) {
-        this(Paths.get(dbip));
+    /**
+     * Internal constructor.
+     */
+    private DbIpLookupService() {
+        this.entries = new TreeMap<>();
+        this.ipv6entries = new TreeMap<>();
+        this.parser = new DbIpFileParser(new StringPool());
     }
 
     /**
      * Loads the DB-IP database entries from the given file.
+     *
+     * @param fileName
+     *            the file name of the db-ip geolocation file.
      */
-    public DbIpLookupService(Path dbip) {
+    public DbIpLookupService(String fileName) {
         this();
-        checkNotNull(dbip, "Pre-condition violated: db must not be null.");
+        checkNotNull(fileName, "Pre-condition violated: fileName must not be null.");
 
-        try (InputStream fis = Files.newInputStream(dbip, StandardOpenOption.READ);
-             InputStream gis = new GZIPInputStream(fis);
-             Reader decorator = new InputStreamReader(gis, StandardCharsets.UTF_8);
-             BufferedReader reader = new BufferedReader(decorator);) {
+        try (InputStream fis = Files.newInputStream(Paths.get(fileName), StandardOpenOption.READ);
+                InputStream gis = new GZIPInputStream(fis);
+                Reader reader = new InputStreamReader(gis, StandardCharsets.UTF_8)) {
 
-            logger.info("Reading dbip data from {}", dbip);
-            String line = null;
-            int i = 0;
-            while ((line = reader.readLine()) != null) {
-                GeoIpEntry e = GeoIpEntry.fromLine(line, stringPool);
-                addEntry(e);
-                i++;
-
-                if (i % 100000 == 0) {
-                    logger.info("Loaded {} ipv4 entries from {} ...", entries.size(), dbip);
-                    logger.info("Loaded {} ipv6 entries from {} ...", ipv6entries.size(), dbip);
-                }
-            }
-
-            logger.info("Finished reading {} ipv4 entries from {} ...", entries.size(), dbip);
-            logger.info("Finished reading {} ipv6 entries from {} ...", ipv6entries.size(), dbip);
+            logger.info("Loading IP geolocation data from {} ...", fileName);
+            parser.parse(reader, this::addEntry);
+            logger.info("IP geolocation data loaded, {} IPv4 and {} IPv6 entries", entries.size(), ipv6entries.size());
         } catch (Exception e) {
-            logger.warn("Could not load file from path {}.", dbip, e);
+            logger.warn("Could not load file from path {}.", fileName, e);
         }
     }
 
@@ -108,9 +102,7 @@ public class DbIpLookupService implements GeoIpLookupService {
      */
     @VisibleForTesting
     public DbIpLookupService(GeoIpEntry... entries) {
-        this.entries = new TreeMap<>();
-        this.ipv6entries = new TreeMap<>();
-        this.stringPool = new StringPool();
+        this();
         for (GeoIpEntry entry : entries) {
             addEntry(entry);
         }
