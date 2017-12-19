@@ -45,10 +45,6 @@ public class DbIpLookupService implements GeoIpLookupService {
         this(Paths.get(dbip));
     }
 
-    public DbIpLookupService(Resource dbip) throws IOException {
-        this(Paths.get(dbip.getFile().getAbsolutePath()));
-    }
-
     /**
      * Loads the DB-IP database entries from the given file.
      */
