@@ -16,10 +16,6 @@ public class GeoIpEntryMatch {
    private final GeoIpEntry entry;
    private final InetAddress address;
 
-   public GeoIpEntryMatch(String address, GeoIpEntry entry) {
-      this(InetAddresses.forString(address), entry);
-   }
-
    public GeoIpEntryMatch(InetAddress address, GeoIpEntry entry) {
 
       checkNotNull(address, "Pre-condition violated: address must not be null.");
