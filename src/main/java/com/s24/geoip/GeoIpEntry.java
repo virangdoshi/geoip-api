@@ -4,16 +4,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.Inet6Address;
 import java.net.InetAddress;
-import java.util.Iterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import com.google.common.base.CharMatcher;
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.net.InetAddresses;
-import com.google.common.primitives.Chars;
 
 public class GeoIpEntry {
 
@@ -22,70 +16,11 @@ public class GeoIpEntry {
             timezoneName,
             connectionType, organizationName;
 
-    public static GeoIpEntry fromLine(String csv, StringPool stringPool) {
-        checkNotNull(csv, "Pre-condition violated: csv must not be null.");
-
-        Iterator<String> parts = new DbIpLineParser(csv);
-        InetAddress start = InetAddresses.forString(parts.next());
-        InetAddress end = InetAddresses.forString(parts.next());
-        String country = stringPool.pool(parts.next());
-        String region = null;
-        String city = null;
-        String cityDistrict = null;
-        String latitude = null;
-        String longitude = null;
-        String timezoneOffset = null;
-        String timezoneName = null;
-        String ispName = null;
-        String connectionType = null;
-        String organizationName = null;
-
-        // optional parts
-        if (parts.hasNext()) {
-            region = stringPool.pool(parts.next());
-        }
-        if (parts.hasNext()) {
-            String cad = parts.next();
-            int idx = cad.indexOf('(');
-            if (idx != -1 && (idx + 1) < cad.length()) {
-                city = stringPool.pool(cad.substring(0, idx).trim());
-                cityDistrict = stringPool.pool(cad.substring(idx + 1, cad.indexOf(')', idx + 1)));
-            } else {
-                city = stringPool.pool(cad);
-                cityDistrict = null;
-            }
-        }
-        if (parts.hasNext()) {
-            latitude = stringPool.pool(parts.next());
-        }
-        if (parts.hasNext()) {
-            longitude = stringPool.pool(parts.next());
-        }
-        if (parts.hasNext()) {
-            timezoneOffset = stringPool.pool(parts.next());
-        }
-        if (parts.hasNext()) {
-            timezoneName = stringPool.pool(parts.next());
-        }
-        if (parts.hasNext()) {
-            ispName = stringPool.pool(parts.next());
-        }
-        if (parts.hasNext()) {
-            connectionType = stringPool.pool(parts.next());
-        }
-        if (parts.hasNext()) {
-            organizationName = stringPool.pool(parts.next());
-        }
-
-        return new GeoIpEntry(start, end, country, region, city, cityDistrict, latitude, longitude, timezoneOffset,
-                timezoneName, ispName, connectionType, organizationName);
-    }
-
     public GeoIpEntry(InetAddress start, InetAddress end, String country, String region, String city,
-                      String cityDistrict,
-                      String latitude, String longitude, String timezoneOffset, String timezoneName, String ispName,
-                      String connectionType,
-                      String organizationName) {
+            String cityDistrict,
+            String latitude, String longitude, String timezoneOffset, String timezoneName, String ispName,
+            String connectionType,
+            String organizationName) {
         checkNotNull(start, "Pre-condition violated: start must not be null.");
         checkNotNull(end, "Pre-condition violated: end must not be null.");
         checkNotNull(country, "Pre-condition violated: country must not be null.");
@@ -113,9 +48,7 @@ public class GeoIpEntry {
         int startAsInt = InetAddresses.coerceToInteger(start);
         int endAsInt = InetAddresses.coerceToInteger(end);
 
-        return startAsInt <= endAsInt ?
-                ord >= startAsInt && ord <= endAsInt :
-                ord <= startAsInt && ord >= endAsInt;
+        return startAsInt <= endAsInt ? ord >= startAsInt && ord <= endAsInt : ord <= startAsInt && ord >= endAsInt;
     }
 
     public boolean isIpv6() {
