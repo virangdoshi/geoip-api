@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.net.InetAddresses;
-import com.s24.geoip.GeoIpEntryMatch;
 import com.s24.geoip.GeoIpLookupService;
 
 /**
@@ -59,7 +58,7 @@ public class GeoIpRestController {
         if (lookupService.lookup(ip) != null) {
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(new GeoIpEntryMatch(ip, lookupService.lookup(ip)));
+                    .body(new GeoIpEntryDocument(ip, lookupService.lookup(ip)));
         } else {
             return ResponseEntity.notFound().build();
         }
