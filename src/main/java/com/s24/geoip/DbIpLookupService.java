@@ -39,7 +39,7 @@ public class DbIpLookupService implements GeoIpLookupService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final TreeMap<Integer, GeoIpEntry> entries;
     private final TreeMap<Integer, GeoIpEntry> ipv6entries;
-    StringPool stringPool;
+    private final StringPool stringPool;
 
     public DbIpLookupService(String dbip) {
         this(Paths.get(dbip));
