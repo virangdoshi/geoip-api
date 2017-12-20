@@ -9,7 +9,6 @@ import java.nio.ByteBuffer;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
-import com.google.common.net.InetAddresses;
 import com.google.common.primitives.Ints;
 
 public class GeoIpEntry {
@@ -73,10 +72,6 @@ public class GeoIpEntry {
 
     public boolean isIpv6() {
         return start instanceof Inet6Address;
-    }
-
-    public Integer getCoercedStart() {
-        return InetAddresses.coerceToInteger(start);
     }
 
     public InetAddress getStart() {
