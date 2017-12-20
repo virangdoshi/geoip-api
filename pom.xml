@@ -146,7 +146,11 @@
                                 <tags>
                                     <tag>latest</tag>
                                 </tags>
-                                <dockerFile>${project.basedir}/Dockerfile</dockerFile>
+                                <dockerFile>Dockerfile</dockerFile>
+                                <assembly>
+                                    <name>target</name>
+                                    <descriptorRef>artifact</descriptorRef>
+                                </assembly>
                             </build>
                         </image>
                     </images>
