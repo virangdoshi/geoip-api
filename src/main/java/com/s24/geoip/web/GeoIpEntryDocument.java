@@ -1,4 +1,4 @@
-package com.s24.geoip;
+package com.s24.geoip.web;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -7,20 +7,19 @@ import java.net.InetAddress;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.net.InetAddresses;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.s24.geoip.GeoIpEntry;
 
+/**
+ * Response document type for lookup requests.
+ */
 @JsonIgnoreProperties
-public class GeoIpEntryMatch {
+public class GeoIpEntryDocument {
 
    private final GeoIpEntry entry;
    private final InetAddress address;
 
-   public GeoIpEntryMatch(String address, GeoIpEntry entry) {
-      this(InetAddresses.forString(address), entry);
-   }
-
-   public GeoIpEntryMatch(InetAddress address, GeoIpEntry entry) {
+   GeoIpEntryDocument(InetAddress address, GeoIpEntry entry) {
 
       checkNotNull(address, "Pre-condition violated: address must not be null.");
       checkNotNull(entry, "Pre-condition violated: entry must not be null.");

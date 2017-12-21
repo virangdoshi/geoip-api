@@ -1,7 +1,6 @@
 package com.s24.geoip;
 
 import com.google.common.net.InetAddresses;
-import com.s24.geoip.impl.DbIpLookupService;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

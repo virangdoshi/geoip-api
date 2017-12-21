@@ -18,22 +18,11 @@
     <context:annotation-config />
 
     <!-- dbip lookup -->
-    <bean class="com.s24.geoip.impl.DbIpLookupService">
+    <bean class="com.s24.geoip.DbIpLookupService">
         <constructor-arg type="java.lang.String">
             <jee:jndi-lookup
                 jndi-name="dbip-path"
                 default-value="#{ systemProperties['dbip-path'] != null ? systemProperties['dbip-path'] : 'WEB-INF/db/dbip-city-latest.csv.gz' }" />
         </constructor-arg>
     </bean>
-    
-    <!-- ømq -->
-    <bean class="com.s24.geoip.zeromq.ZeroMqAdapter" />
-    <bean class="com.s24.geoip.zeromq.impl.DbIpGeoLocationMessageHandler">
-        <constructor-arg>
-            <jee:jndi-lookup
-                jndi-name="zmq-binding"
-                default-value="#{ systemProperties['zmq-binding'] != null ? systemProperties['zmq-binding'] : 'tcp://*:19000' }" />
-        </constructor-arg>
-    </bean>
-   
 </beans>

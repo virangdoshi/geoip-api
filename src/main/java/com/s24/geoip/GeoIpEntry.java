@@ -2,6 +2,7 @@ package com.s24.geoip;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.util.Iterator;
 import java.util.regex.Matcher;
@@ -115,6 +116,10 @@ public class GeoIpEntry {
         return startAsInt <= endAsInt ?
                 ord >= startAsInt && ord <= endAsInt :
                 ord <= startAsInt && ord >= endAsInt;
+    }
+
+    public boolean isIpv6() {
+        return start instanceof Inet6Address;
     }
 
     public Integer getCoercedStart() {
