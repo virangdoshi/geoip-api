@@ -60,4 +60,11 @@ public class GeoIpRestControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("{\"country\":\"ZZ\",\"connection\":\"ipv6\",\"organization\":\"test\"}"));
     }
+
+    @Test
+    public void testInvalidIpAddresses() throws Exception {
+        mockMvc.perform(get("/1.2.3.4.5")).andExpect(status().isBadRequest());
+        mockMvc.perform(get("/example.com")).andExpect(status().isBadRequest());
+        mockMvc.perform(get("/something")).andExpect(status().isBadRequest());
+    }
 }

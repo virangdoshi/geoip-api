@@ -12,7 +12,10 @@ public class InetAdressPropertyEditor extends PropertyEditorSupport {
    public void setAsText(String text) throws IllegalArgumentException {
       checkNotNull(text, "Pre-condition violated: text must not be null.");
 
-      setValue(InetAddresses.forString(text));
+      try {
+         setValue(InetAddresses.forString(text));
+      } catch (IllegalArgumentException e) {
+         throw new InvalidIpAddressException(e.getMessage());
+      }
    }
-
 }

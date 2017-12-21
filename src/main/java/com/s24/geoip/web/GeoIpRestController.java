@@ -60,11 +60,18 @@ public class GeoIpRestController {
         }
     }
 
+    @ExceptionHandler(InvalidIpAddressException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleInvalidIpAddress(Exception e) {
+        return e.getMessage();
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException(Exception e) {
-        logger.warn(e.getMessage(), e);
+        logger.error(e.getMessage(), e);
         return "We ran into an error: " + e.getMessage();
     }
 
