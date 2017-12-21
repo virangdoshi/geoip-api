@@ -29,12 +29,15 @@ public class DbIpLookupServiceTest {
     public void testLookupIpv6() throws Exception {
         GeoIpEntry entry1 = new GeoIpEntry(InetAddresses.forString("2001:db8:1::"), InetAddresses.forString("2001:db8:1:ffff:ffff:ffff:ffff:ffff"), "ZZ", null, null, null, null, null, null, null, null, null, null);
         GeoIpEntry entry2 = new GeoIpEntry(InetAddresses.forString("2001:db8:2::"), InetAddresses.forString("2001:db8:2:ffff:ffff:ffff:ffff:ffff"), "ZZ", null, null, null, null, null, null, null, null, null, null);
-        service = new DbIpLookupService(entry1, entry2);
+        GeoIpEntry entry3 = new GeoIpEntry(InetAddresses.forString("2001:db8:88:bea::"), InetAddresses.forString("2001:db8:88:bea:ffff:ffff:ffff:ffff"), "ZZ", null, null, null, null, null, null, null, null, null, null);
+        service = new DbIpLookupService(entry1, entry2, entry3);
 
         assertEquals(entry1, service.lookup(InetAddresses.forString("2001:db8:1:0:0:0:0:1")));
         assertEquals(entry1, service.lookup(InetAddresses.forString("2001:db8:1:ffff:ffff:ffff:ffff:fffe")));
         assertEquals(entry2, service.lookup(InetAddresses.forString("2001:db8:2:0:0:0:0:1")));
         assertEquals(entry2, service.lookup(InetAddresses.forString("2001:db8:2:ffff:ffff:ffff:ffff:fffe")));
+        assertEquals(entry3, service.lookup(InetAddresses.forString("2001:db8:88:bea::1")));
+        assertEquals(entry3, service.lookup(InetAddresses.forString("2001:db8:88:bea:ffff:ffff:ffff:fffe")));
     }
 
     @Test

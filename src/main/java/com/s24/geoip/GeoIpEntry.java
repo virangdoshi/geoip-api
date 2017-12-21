@@ -2,12 +2,14 @@ package com.s24.geoip;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.nio.ByteBuffer;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
-import com.google.common.net.InetAddresses;
+import com.google.common.primitives.Ints;
 
 public class GeoIpEntry {
 
@@ -24,6 +26,11 @@ public class GeoIpEntry {
         checkNotNull(start, "Pre-condition violated: start must not be null.");
         checkNotNull(end, "Pre-condition violated: end must not be null.");
         checkNotNull(country, "Pre-condition violated: country must not be null.");
+
+        if ((start instanceof Inet4Address && end instanceof Inet6Address)
+                || (start instanceof Inet6Address && end instanceof Inet4Address)) {
+            throw new IllegalArgumentException("start and end address must have the same IP version");
+        }
 
         this.start = start;
         this.end = end;
@@ -43,20 +50,28 @@ public class GeoIpEntry {
     public boolean isInRange(InetAddress i) {
         checkNotNull(i, "Pre-condition violated: i must not be null.");
 
-        int ord = InetAddresses.coerceToInteger(i);
-
-        int startAsInt = InetAddresses.coerceToInteger(start);
-        int endAsInt = InetAddresses.coerceToInteger(end);
-
-        return startAsInt <= endAsInt ? ord >= startAsInt && ord <= endAsInt : ord <= startAsInt && ord >= endAsInt;
+        if (isIpv6()) {
+            if (!(i instanceof Inet6Address)) {
+                return false;
+            }
+            // Assumes that all IPv6 ranges are at least /64 ranges
+            long start = ByteBuffer.wrap(this.start.getAddress(), 0, 8).getLong();
+            long end = ByteBuffer.wrap(this.end.getAddress(), 0, 8).getLong();
+            long address = ByteBuffer.wrap(i.getAddress(), 0, 8).getLong();
+            return address >= start && address <= end;
+        } else {
+            if (!(i instanceof Inet4Address)) {
+                return false;
+            }
+            int start = Ints.fromByteArray(this.start.getAddress());
+            int end = Ints.fromByteArray(this.end.getAddress());
+            int address = Ints.fromByteArray(i.getAddress());
+            return address >= start && address <= end;
+        }
     }
 
     public boolean isIpv6() {
         return start instanceof Inet6Address;
-    }
-
-    public Integer getCoercedStart() {
-        return InetAddresses.coerceToInteger(start);
     }
 
     public InetAddress getStart() {
