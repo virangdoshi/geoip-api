@@ -1,11 +1,8 @@
 package com.s24.geoip.web;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Objects.requireNonNull;
 
 import java.net.InetAddress;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-import com.google.common.net.InetAddresses;
+import com.s24.geoip.GeoIpEntry;
 import com.s24.geoip.GeolocationIndex;
 
 /**
@@ -51,20 +46,15 @@ public class GeoIpRestController {
     }
 
     /**
-     * This is a pretty fuckup, but path matching with ip adresses is a horror in spring. So we use this for now ...
+     * Lookup the geolocation information for an ip address.
      */
-    @RequestMapping(value = "/**", method = RequestMethod.GET)
-    public ResponseEntity handleLookup(HttpServletRequest request) {
-        checkNotNull(request, "Pre-condition violated: ip must not be null.");
-
-        InetAddress ip = InetAddresses.forString(
-                Iterables.getLast(
-                        Splitter.on('/').omitEmptyStrings().split(request.getRequestURI())));
-
-        if (geolocations.lookup(ip) != null) {
+    @RequestMapping(value = "/{address:.+}", method = RequestMethod.GET)
+    public ResponseEntity lookup(@PathVariable InetAddress address) {
+        GeoIpEntry result = geolocations.lookup(address);
+        if (result != null) {
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(new GeoIpEntryDocument(ip, geolocations.lookup(ip)));
+                    .body(new GeoIpEntryDocument(address, result));
         } else {
             return ResponseEntity.notFound().build();
         }
