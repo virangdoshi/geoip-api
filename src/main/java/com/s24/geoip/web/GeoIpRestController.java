@@ -1,12 +1,12 @@
 package com.s24.geoip.web;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 import java.net.InetAddress;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.s24.geoip.GeolocationIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +15,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.net.InetAddresses;
+import com.s24.geoip.GeolocationIndex;
 
 /**
  * Provides a Geo Lookup service for IPv4 and IPv6 addresses with the help of DB-IP.
@@ -36,10 +32,20 @@ public class GeoIpRestController {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private GeolocationIndex geolocations;
+    private final GeolocationIndex geolocations;
 
-    @RequestMapping(value = {"/", "/favicon.ico", "/robots.txt"})
+    /**
+     * Creates a controller that serves the geolocations from the given index.
+     * 
+     * @param geolocations
+     *            the geolocation index.
+     */
+    @Autowired
+    public GeoIpRestController(GeolocationIndex geolocations) {
+        this.geolocations = requireNonNull(geolocations);
+    }
+
+    @RequestMapping(value = { "/", "/favicon.ico", "/robots.txt" })
     public ResponseEntity handleKnownNotFounds() {
         return ResponseEntity.notFound().build();
     }
