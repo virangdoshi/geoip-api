@@ -6,14 +6,13 @@ This project provides a simple web service which returns geolocation information
 data is loaded from a [db-ip.com geoip database](https://db-ip.com/db/) file. The service requires the "full" database
 (IP address to location + ISP).
 
-The application is built as a docker image. The name of the geolocation database file is provided as an environment
-variable, so you can mount the file into the container. If you don't provide a database file, a sample file will be
-used which contains only a single entry.
+The application is built as a docker image. The application by default expects to find the db-ip database file as
+`/srv/dbip.csv.gz`. You can use a volume mount to mount the database file into the running container. If you mount the
+file to a different location, you must also set the environment variable `DB_IP_FILE`.
 
 ## Example usage
 
-    docker run -p 8080:8080 -v /path/to/dbip-full.csv.gz:/srv/dbip.csv.gz \
-      -e DB_IP_FILE=/srv/dbip.csv.gz <imagename>
+    docker run -p 8080:8080 -v /path/to/dbip-full.csv.gz:/srv/dbip.csv.gz s24/geoip-api
 
 ## How to call the service
 
@@ -38,7 +37,7 @@ Simply make an HTTP GET request with the IP address:
 
 ## Building the project
 
-This should install the current version into your local repository
+Build the container image by calling:
 
     $ mvn clean verify
 
