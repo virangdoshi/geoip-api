@@ -142,7 +142,7 @@
                 <configuration>
                     <images>
                         <image>
-                            <name>s24/geoip-api</name>
+                            <name>shopping24/geoip-api</name>
                             <build>
                                 <tags>
                                     <tag>latest</tag>
