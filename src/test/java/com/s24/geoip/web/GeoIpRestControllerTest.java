@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.s24.geoip.GeoIpEntry;
-import com.s24.geoip.GeoIpLookupService;
+import com.s24.geoip.GeolocationIndex;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -24,7 +24,7 @@ public class GeoIpRestControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private GeoIpLookupService lookupService;
+    private GeolocationIndex index;
 
     @InjectMocks
     private GeoIpRestController restController;
@@ -37,7 +37,7 @@ public class GeoIpRestControllerTest {
 
     @Test
     public void testNotFound() throws Exception {
-        when(lookupService.lookup(any())).thenReturn(null);
+        when(index.lookup(any())).thenReturn(null);
         mockMvc.perform(get("/1.2.3.4").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -46,7 +46,7 @@ public class GeoIpRestControllerTest {
     public void testFound() throws Exception {
         GeoIpEntry result = new GeoIpEntry(InetAddresses.forString("1.2.3.0"), InetAddresses.forString("1.2.3.255"),
                 "ZZ", "", "", "", "", "", "", "", "", "", "");
-        when(lookupService.lookup(any())).thenReturn(result);
+        when(index.lookup(any())).thenReturn(result);
         mockMvc.perform(get("/1.2.3.4").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));

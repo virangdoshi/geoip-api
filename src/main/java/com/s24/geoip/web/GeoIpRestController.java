@@ -6,6 +6,7 @@ import java.net.InetAddress;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.s24.geoip.GeolocationIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.net.InetAddresses;
-import com.s24.geoip.GeoIpLookupService;
 
 /**
  * Provides a Geo Lookup service for IPv4 and IPv6 addresses with the help of DB-IP.
@@ -37,7 +37,7 @@ public class GeoIpRestController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private GeoIpLookupService lookupService;
+    private GeolocationIndex geolocations;
 
     @RequestMapping(value = {"/", "/favicon.ico", "/robots.txt"})
     public ResponseEntity handleKnownNotFounds() {
@@ -55,10 +55,10 @@ public class GeoIpRestController {
                 Iterables.getLast(
                         Splitter.on('/').omitEmptyStrings().split(request.getRequestURI())));
 
-        if (lookupService.lookup(ip) != null) {
+        if (geolocations.lookup(ip) != null) {
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(new GeoIpEntryDocument(ip, lookupService.lookup(ip)));
+                    .body(new GeoIpEntryDocument(ip, geolocations.lookup(ip)));
         } else {
             return ResponseEntity.notFound().build();
         }
