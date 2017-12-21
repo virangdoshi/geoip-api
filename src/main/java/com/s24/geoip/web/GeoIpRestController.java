@@ -54,7 +54,7 @@ public class GeoIpRestController {
         if (result != null) {
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(new GeoIpEntryDocument(address, result));
+                    .body(result);
         } else {
             return ResponseEntity.notFound().build();
         }
