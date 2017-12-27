@@ -25,7 +25,7 @@ import com.google.common.net.InetAddresses;
  */
 final class DbIpFileParser {
 
-    // The column names (null means ignore that field)
+    // The column names
     private static final String IP_START = "ip_start";
     private static final String IP_END = "ip_end";
     private static final String COUNTRY = "country";
