@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.s24</groupId>
-    <artifactId>dbip-api</artifactId>
-    <name>dbip-api</name>
+    <artifactId>geoip-api</artifactId>
+    <name>geoip-api</name>
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <description>A REST / ØMQ API to query db-ip geoip databases</description>
+    <description>A REST API to query db-ip geoip databases</description>
     <url>https://github.com/shopping24/geoip-dbip-rest-api</url>
 
     <parent>
