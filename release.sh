@@ -28,5 +28,3 @@ fi
 
 # Build & publish the release
 mvn "-Drevision=${VERSION}" clean deploy scm:tag
-#docker push "shopping24/geoip-api:latest"
-#docker push "shopping24/geoip-api:${VERSION}"
