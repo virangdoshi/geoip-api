@@ -27,6 +27,6 @@ if [ $(git rev-parse -q --verify "refs/tags/v${VERSION}") ]; then
 fi
 
 # Build & publish the release
-mvn "-Drevision=${VERSION}" clean package scm:tag
-docker push "shopping24/geoip-api:latest"
-docker push "shopping24/geoip-api:${VERSION}"
+mvn "-Drevision=${VERSION}" clean deploy scm:tag
+#docker push "shopping24/geoip-api:latest"
+#docker push "shopping24/geoip-api:${VERSION}"
