@@ -23,7 +23,6 @@ When the container is running, you can query it via simple HTTP GET requests:
 
     curl http://localhost:8080/0.0.0.1
     {
-      "address": "0.0.0.1",
       "country": "ZZ",
       "latitude": "0",
       "longitude": "0",
