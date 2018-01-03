@@ -63,7 +63,7 @@ public class RestApiIT {
     public void test400ResponseForInvalidInput() throws Exception {
         try {
             ResponseEntity<Map> response = restTemplate.getForEntity(restUrl, Map.class, "invalid");
-            fail("Expected response with status code 404, but got " + response.getStatusCode());
+            fail("Expected response with status code 400, but got " + response.getStatusCode());
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() != HttpStatus.BAD_REQUEST) {
                 fail("Expected response with status code 400, but got " + e.getStatusCode());
