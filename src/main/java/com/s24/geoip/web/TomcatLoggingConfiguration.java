@@ -32,6 +32,7 @@ public class TomcatLoggingConfiguration {
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
                     throws IOException, ServletException {
                 request.setAttribute(MARKER, Boolean.TRUE);
+                chain.doFilter(request, response);
             }
         });
 
