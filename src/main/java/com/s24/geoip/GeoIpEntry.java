@@ -1,5 +1,8 @@
 package com.s24.geoip;
 
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.Inet4Address;
@@ -7,22 +10,43 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.primitives.Ints;
 
+/**
+ * A geolocation database entry.
+ */
+@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, isGetterVisibility = NONE)
+@JsonInclude(NON_EMPTY)
 public class GeoIpEntry {
 
-    private final InetAddress start, end;
-    private final String country, region, city, cityDistrict, latitude, longitude, ispName, timezoneOffset,
-            timezoneName,
-            connectionType, organizationName;
+    @JsonIgnore
+    private final InetAddress start;
+    @JsonIgnore
+    private final InetAddress end;
 
-    public GeoIpEntry(InetAddress start, InetAddress end, String country, String region, String city,
+    private final String country;
+    private final String stateprov;
+    private final String city;
+    private final String cityDistrict;
+    private final String latitude;
+    private final String longitude;
+    private final String isp;
+    private final String timezoneOffset;
+    private final String timezone;
+    private final String connection;
+    private final String organization;
+
+    public GeoIpEntry(InetAddress start, InetAddress end, String country, String stateprov, String city,
             String cityDistrict,
-            String latitude, String longitude, String timezoneOffset, String timezoneName, String ispName,
-            String connectionType,
-            String organizationName) {
+            String latitude, String longitude, String timezoneOffset, String timezone, String isp,
+            String connection,
+            String organization) {
         checkNotNull(start, "Pre-condition violated: start must not be null.");
         checkNotNull(end, "Pre-condition violated: end must not be null.");
         checkNotNull(country, "Pre-condition violated: country must not be null.");
@@ -35,16 +59,16 @@ public class GeoIpEntry {
         this.start = start;
         this.end = end;
         this.country = country;
-        this.region = region;
+        this.stateprov = stateprov;
         this.city = city;
         this.cityDistrict = cityDistrict;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.timezoneName = timezoneName;
+        this.timezone = timezone;
         this.timezoneOffset = timezoneOffset;
-        this.ispName = Strings.emptyToNull(ispName);
-        this.connectionType = Strings.emptyToNull(connectionType);
-        this.organizationName = Strings.emptyToNull(organizationName);
+        this.isp = Strings.emptyToNull(isp);
+        this.connection = Strings.emptyToNull(connection);
+        this.organization = Strings.emptyToNull(organization);
     }
 
     public boolean isInRange(InetAddress i) {
@@ -86,8 +110,8 @@ public class GeoIpEntry {
         return country;
     }
 
-    public String getRegion() {
-        return region;
+    public String getStateprov() {
+        return stateprov;
     }
 
     public String getCity() {
@@ -102,24 +126,24 @@ public class GeoIpEntry {
         return longitude;
     }
 
-    public String getIspName() {
-        return ispName;
+    public String getIsp() {
+        return isp;
     }
 
-    public String getConnectionType() {
-        return connectionType;
+    public String getConnection() {
+        return connection;
     }
 
-    public String getOrganizationName() {
-        return organizationName;
+    public String getOrganization() {
+        return organization;
     }
 
     public String getTimezoneOffset() {
         return timezoneOffset;
     }
 
-    public String getTimezoneName() {
-        return timezoneName;
+    public String getTimezone() {
+        return timezone;
     }
 
     public String getCityDistrict() {
@@ -132,17 +156,16 @@ public class GeoIpEntry {
                 .add("start", start)
                 .add("end", end)
                 .add("country", country)
-                .add("region", region)
+                .add("stateprov", stateprov)
                 .add("city", city)
                 .add("cityDistrict", cityDistrict)
                 .add("latitude", latitude)
                 .add("longitude", longitude)
-                .add("ispName", ispName)
+                .add("isp", isp)
                 .add("timezoneOffset", timezoneOffset)
-                .add("timezoneName", timezoneName)
-                .add("connectionType", connectionType)
-                .add("organizationName", organizationName)
+                .add("timezone", timezone)
+                .add("connection", connection)
+                .add("organization", organization)
                 .toString();
     }
-
 }

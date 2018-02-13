@@ -28,16 +28,16 @@ public class GeoIpEntryTest {
         assertEquals(InetAddresses.forString("192.168.0.0"), entry.getStart());
         assertEquals(InetAddresses.forString("192.168.255.255"), entry.getEnd());
         assertEquals("country", entry.getCountry());
-        assertEquals("region", entry.getRegion());
+        assertEquals("region", entry.getStateprov());
         assertEquals("city", entry.getCity());
         assertEquals("cityDistrict", entry.getCityDistrict());
         assertEquals("latitude", entry.getLatitude());
         assertEquals("longitude", entry.getLongitude());
         assertEquals("timezoneOffset", entry.getTimezoneOffset());
-        assertEquals("timezoneName", entry.getTimezoneName());
-        assertEquals("ispName", entry.getIspName());
-        assertEquals("connectionType", entry.getConnectionType());
-        assertEquals("organizationName", entry.getOrganizationName());
+        assertEquals("timezoneName", entry.getTimezone());
+        assertEquals("ispName", entry.getIsp());
+        assertEquals("connectionType", entry.getConnection());
+        assertEquals("organizationName", entry.getOrganization());
     }
 
     @Test

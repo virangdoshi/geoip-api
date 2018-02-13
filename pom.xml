@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.s24</groupId>
-    <artifactId>dbip-api</artifactId>
-    <name>dbip-api</name>
+    <artifactId>geoip-api</artifactId>
+    <name>GeoIP-API</name>
     <packaging>jar</packaging>
-    <version>0.0.1-SNAPSHOT</version>
-    <description>A REST / ØMQ API to query db-ip geoip databases</description>
+    <version>${revision}</version>
+    <description>A REST API to query db-ip geoip databases</description>
     <url>https://github.com/shopping24/geoip-dbip-rest-api</url>
 
     <parent>
@@ -52,7 +52,7 @@
     </developers>
 
     <prerequisites>
-        <maven>3.2</maven>
+        <maven>3.5</maven>
     </prerequisites>
 
     <properties>
@@ -60,6 +60,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+
+        <!-- Default revision if not provided by build process -->
+        <revision>0-SNAPSHOT</revision>
+
+        <!-- This build builds a docker image, there is no maven artifact to install or deploy -->
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <dependencies>
@@ -83,6 +90,10 @@
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-web</artifactId>
+        </dependency>
+        <dependency>
             <groupId>net.sf.supercsv</groupId>
             <artifactId>super-csv</artifactId>
             <version>2.4.0</version>
@@ -94,6 +105,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>1.5.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -102,17 +119,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.17</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*IntegrationTest.java</exclude>
-                    </excludes>
-                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>de.thetaphi</groupId>
@@ -165,7 +171,35 @@
                             <goal>build</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>push-docker-image</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.20.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>1.9.5</version>
+                <configuration>
+                    <tag>v${project.version}</tag>
+                </configuration>
             </plugin>
         </plugins>
     </build>

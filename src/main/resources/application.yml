@@ -1,0 +1,12 @@
+DB_IP_FILE: /srv/dbip-full.csv.gz
+server:
+  tomcat:
+    max-threads: 16
+    accesslog:
+      enabled: true
+      directory: /dev
+      file-date-format:
+      prefix: stdout
+      suffix:
+      rotate: false
+      request-attributes-enabled: true
