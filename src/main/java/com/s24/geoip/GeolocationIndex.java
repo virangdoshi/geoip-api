@@ -13,7 +13,7 @@ import com.google.common.primitives.Ints;
 /**
  * Maps IP addresses to geolocation information.
  */
-public class GeolocationIndex {
+public class GeolocationIndex implements GeolocationProvider {
 
     private final TreeMap<Integer, GeoIpEntry> entries;
     private final TreeMap<Long, GeoIpEntry> ipv6entries;
@@ -30,6 +30,7 @@ public class GeolocationIndex {
      * Returns the geolocation information for the given IP address, or {@code null} if no information is found for the
      * address.
      */
+    @Override
     public GeoIpEntry lookup(InetAddress inet) {
         checkNotNull(inet, "Pre-condition violated: inet must not be null.");
 

@@ -27,7 +27,7 @@ public class Application {
     }
 
     @Bean
-    public GeolocationIndex geolocationIndex(@Value("${DB_IP_FILE}") String dbIpFileName) {
+    public GeolocationProvider geolocationProvider(@Value("${DB_IP_FILE}") String dbIpFileName) {
         GeolocationIndex service = new GeolocationIndex();
         DbIpFileParser parser = new DbIpFileParser(new StringPool());
         try (InputStream fis = Files.newInputStream(Paths.get(dbIpFileName), StandardOpenOption.READ);

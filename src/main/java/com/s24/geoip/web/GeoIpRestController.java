@@ -15,7 +15,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import com.s24.geoip.GeoIpEntry;
-import com.s24.geoip.GeolocationIndex;
+import com.s24.geoip.GeolocationProvider;
 
 /**
  * Provides a Geo Lookup service for IPv4 and IPv6 addresses with the help of DB-IP.
@@ -27,16 +27,16 @@ public class GeoIpRestController {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final GeolocationIndex geolocations;
+    private final GeolocationProvider geolocations;
 
     /**
-     * Creates a controller that serves the geolocations from the given index.
+     * Creates a controller that serves the geolocations from the given provider.
      * 
      * @param geolocations
-     *            the geolocation index.
+     *            the geolocation provider.
      */
     @Autowired
-    public GeoIpRestController(GeolocationIndex geolocations) {
+    public GeoIpRestController(GeolocationProvider geolocations) {
         this.geolocations = requireNonNull(geolocations);
     }
 
