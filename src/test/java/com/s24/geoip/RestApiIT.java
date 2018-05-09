@@ -1,73 +1,69 @@
 package com.s24.geoip;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.mockito.AdditionalMatchers.not;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.when;
 
 import java.util.Map;
 
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.wait.Wait;
+import org.springframework.test.context.junit4.SpringRunner;
 
-/**
- * Integration test which runs the REST API in a container.
- */
+import com.google.common.net.InetAddresses;
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.exception.AddressNotFoundException;
+import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.record.Country;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RestApiIT {
 
-    @ClassRule
-    public static GenericContainer geoIpApi = new GenericContainer("shopping24/geoip-api:latest")
-            .withExposedPorts(8080)
-            .waitingFor(Wait.forHttp("/0.0.0.1").forStatusCode(200));
+    private static final String REST_URL = "/{address}";
 
-    private String restUrl;
-    private RestTemplate restTemplate;
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @MockBean
+    private DatabaseReader databaseReader;
 
     @Before
     public void setUp() throws Exception {
-        String host = geoIpApi.getContainerIpAddress();
-        int port = geoIpApi.getMappedPort(8080);
-        restUrl = String.format("http://%s:%d/{address}", host, port);
-        restTemplate = new RestTemplate();
+        when(databaseReader.city(eq(InetAddresses.forString("192.0.2.1")))).thenReturn(
+                new CityResponse(null, null,
+                        new Country(null, 0, 0, "ZZ", null),
+                        null, null, null, null, null, null, null));
+        when(databaseReader.city(not(eq(InetAddresses.forString("192.0.2.1")))))
+                .thenThrow(new AddressNotFoundException("test"));
     }
 
     @Test
     public void testRestApiRunningInContainer() throws Exception {
-        ResponseEntity<Map> response = restTemplate.getForEntity(restUrl, Map.class, "0.0.0.1");
+        ResponseEntity<Map> response = restTemplate.getForEntity(REST_URL, Map.class, "192.0.2.1");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
         assertEquals("ZZ", response.getBody().get("country"));
-        assertEquals("Current network", response.getBody().get("isp"));
-        assertEquals("RFC 6890", response.getBody().get("organization"));
     }
 
     @Test
     public void test404ResponseForIpAddressWithoutEntry() throws Exception {
-        try {
-            ResponseEntity<Map> response = restTemplate.getForEntity(restUrl, Map.class, "192.0.2.1");
-            fail("Expected response with status code 404, but got " + response.getStatusCode());
-        } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() != HttpStatus.NOT_FOUND) {
-                fail("Expected response with status code 404, but got " + e.getStatusCode());
-            }
-        }
+        ResponseEntity<Map> response = restTemplate.getForEntity(REST_URL, Map.class, "192.0.2.2");
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
     public void test400ResponseForInvalidInput() throws Exception {
-        try {
-            ResponseEntity<Map> response = restTemplate.getForEntity(restUrl, Map.class, "invalid");
-            fail("Expected response with status code 400, but got " + response.getStatusCode());
-        } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() != HttpStatus.BAD_REQUEST) {
-                fail("Expected response with status code 400, but got " + e.getStatusCode());
-            }
-        }
+        ResponseEntity<String> response = restTemplate.getForEntity(REST_URL, String.class, "invalid");
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 }

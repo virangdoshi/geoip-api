@@ -1,14 +1,7 @@
 package com.s24.geoip;
 
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.zip.GZIPInputStream;
+import java.io.File;
+import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import com.maxmind.db.CHMCache;
+import com.maxmind.geoip2.DatabaseReader;
 
 @SpringBootApplication
 public class Application {
@@ -27,20 +23,13 @@ public class Application {
     }
 
     @Bean
-    public GeolocationIndex geolocationIndex(@Value("${DB_IP_FILE}") String dbIpFileName) {
-        GeolocationIndex service = new GeolocationIndex();
-        DbIpFileParser parser = new DbIpFileParser(new StringPool());
-        try (InputStream fis = Files.newInputStream(Paths.get(dbIpFileName), StandardOpenOption.READ);
-             InputStream gis = new GZIPInputStream(fis);
-             Reader reader = new InputStreamReader(gis, StandardCharsets.UTF_8)) {
+    public GeolocationProvider geolocationProvider(DatabaseReader reader) {
+        return new MaxmindGeolocationDatabase(reader);
+    }
 
-            logger.info("Loading IP geolocation data from {} ...", dbIpFileName);
-            parser.parse(reader, service::add);
-            logger.info("Loaded geolocation data for {} IP address ranges", service.numberOfEntries());
-        } catch (Exception e) {
-            logger.warn("Could not load file from path {}.", dbIpFileName, e);
-        }
-
-        return service;
+    @Bean
+    public DatabaseReader maxmindDatabaseReader(@Value("${DB_FILE}") String dbFileName) throws IOException {
+        File file = new File(dbFileName);
+        return new DatabaseReader.Builder(file).withCache(new CHMCache()).build();
     }
 }

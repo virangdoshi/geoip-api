@@ -1,4 +1,4 @@
-DB_IP_FILE: /srv/dbip-full.csv.gz
+DB_FILE: /srv/GeoLite2-City.mmdb
 server:
   tomcat:
     max-threads: 16

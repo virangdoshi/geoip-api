@@ -3,33 +3,28 @@
 
 This project provides a simple web service which returns geolocation information for a given IP address.
 
-Geolocation data is loaded from a [db-ip.com geoip database](https://db-ip.com/db/) file. The service requires the
-"full" database (IP address to location + ISP), which you need to purchase from db-ip. The database file is loaded from
-the file set in the environment variable `DB_IP_FILE`, `/srv/dbip.csv.gz` by default. You can use a volume mount to
-mount the database file into the running container.
-
-To test the image, you can run it without a mount. The image includes a sample file with a single entry for the IPv4
-address range 0.0.0.0/8.
+Geolocation data is loaded from the GeoIP2 City database (commercial) or
+[GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) database by Maxmind. The database file is not included in
+this project. When running this service as a docker container, mount the database file as `/srv/GeoLite2-City.mmdb`
+(or, if you mount the file at a different location inside the container, set the environment variable `DB_FILE` to the
+location).
 
 ## Running the container
 
     docker run -p 8080:8080 \
-        -v /path/to/dbip-full.csv.gz:/srv/dbip.csv.gz \
+        -v /path/to/GeoLite2-City.mmdb:/srv/GeoLite2-City.mmdb \
         shopping24/geoip-api
 
 ## Using the API
 
 When the container is running, you can query it via simple HTTP GET requests:
 
-    curl http://localhost:8080/0.0.0.1
+    curl http://localhost:8080/8.8.8.8
     {
-      "country": "ZZ",
-      "latitude": "0",
-      "longitude": "0",
-      "isp": "Current network",
-      "organization": "RFC 6890"
+        "country":"US",
+        "latitude":"37.751",
+        "longitude":"-97.822"
     }
-
 
 ## Building the project
 
