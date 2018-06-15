@@ -39,18 +39,19 @@ public class Application {
     @Bean(name = "cityDatabaseReader")
     @ConditionalOnProperty("CITY_DB_FILE")
     public DatabaseReader cityDatabaseReader(@Value("${CITY_DB_FILE}") String dbFileName) throws IOException {
-        File file = new File(dbFileName);
-        DatabaseReader bean = new DatabaseReader.Builder(file).withCache(new CHMCache()).build();
-        logger.info("Loaded city database {} (database build date: {})", file, bean.getMetadata().getBuildDate());
-        return bean;
+        return buildDatabaseReader(dbFileName);
     }
 
     @Bean(name = "ispDatabaseReader")
     @ConditionalOnProperty("ISP_DB_FILE")
     public DatabaseReader ispDatabaseReader(@Value("${ISP_DB_FILE}") String dbFileName) throws IOException {
-        File file = new File(dbFileName);
+        return buildDatabaseReader(dbFileName);
+    }
+
+    private DatabaseReader buildDatabaseReader(String fileName) throws IOException {
+        File file = new File(fileName);
         DatabaseReader bean = new DatabaseReader.Builder(file).withCache(new CHMCache()).build();
-        logger.info("Loaded ISP database {} (database build date: {})", file, bean.getMetadata().getBuildDate());
+        logger.info("Loaded database file {} (build date: {})", file, bean.getMetadata().getBuildDate());
         return bean;
     }
 }
