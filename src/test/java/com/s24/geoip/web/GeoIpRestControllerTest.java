@@ -31,20 +31,8 @@ public class GeoIpRestControllerTest {
     @Before
     public void setUp() throws Exception {
         provider = mock(GeolocationProvider.class);
-        when(provider.lookup(eq(IPV4_ADDR))).thenReturn(new GeoIpEntry(
-                "ZZ",
-                null,
-                null,
-                null,
-                null,
-                null));
-        when(provider.lookup(eq(IPV6_ADDR))).thenReturn(new GeoIpEntry(
-                "ZZ",
-                null,
-                null,
-                null,
-                null,
-                null));
+        when(provider.lookup(eq(IPV4_ADDR))).thenReturn(new GeoIpEntry.Builder().setCountry("ZZ").build());
+        when(provider.lookup(eq(IPV6_ADDR))).thenReturn(new GeoIpEntry.Builder().setCountry("ZZ").build());
         restController = new GeoIpRestController(provider);
         mockMvc = MockMvcBuilders.standaloneSetup(restController).build();
     }
