@@ -1,34 +1,45 @@
 package com.s24.geoip;
 
-import static java.util.Objects.requireNonNull;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Objects;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.AddressNotFoundException;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.model.IspResponse;
 
 /**
  * Implements {@code GeolocationProvider} by using the Maxmind GeoIP database.
  */
-class MaxmindGeolocationDatabase implements GeolocationProvider {
+final class MaxmindGeolocationDatabase implements GeolocationProvider {
 
-    private final DatabaseReader reader;
+    private final DatabaseReader cityDatabaseReader;
+    private final DatabaseReader ispDatabaseReader;
 
-    @Autowired
-    MaxmindGeolocationDatabase(DatabaseReader reader) {
-        this.reader = requireNonNull(reader);
+    MaxmindGeolocationDatabase(DatabaseReader cityDatabaseReader, DatabaseReader ispDatabaseReader) {
+        if (cityDatabaseReader == null && ispDatabaseReader == null) {
+            throw new NullPointerException("At least one of cityDatabaseReader or ispDatabaseReader must be non-null");
+        }
+        this.cityDatabaseReader = cityDatabaseReader;
+        this.ispDatabaseReader = ispDatabaseReader;
     }
 
     @Override
     public GeoIpEntry lookup(InetAddress addr) {
+        GeoIpEntry.Builder responseBuilder = new GeoIpEntry.Builder();
+        // boolean logical or in next line, not conditional or (always run both methods)
+        boolean hasData = lookupCityData(addr, responseBuilder) | lookupIspData(addr, responseBuilder);
+        return hasData ? responseBuilder.build() : null;
+    }
+
+    private boolean lookupCityData(InetAddress addr, GeoIpEntry.Builder builder) {
+        if (cityDatabaseReader == null) {
+            return false;
+        }
         try {
-            CityResponse response = reader.city(addr);
+            CityResponse response = cityDatabaseReader.city(addr);
 
             // Null-safe conversions
             String country = response.getCountry() != null ? response.getCountry().getIsoCode() : null;
@@ -44,9 +55,38 @@ class MaxmindGeolocationDatabase implements GeolocationProvider {
                     : null;
             String timezone = response.getLocation() != null ? response.getLocation().getTimeZone() : null;
 
-            return new GeoIpEntry(country, state, city, latitude, longitude, timezone);
+            builder.setCountry(country)
+                    .setStateprov(state)
+                    .setCity(city)
+                    .setLatitude(latitude)
+                    .setLongitude(longitude)
+                    .setTimezone(timezone);
+            return true;
+
         } catch (AddressNotFoundException e) {
-            return null;
+            // no city information found, this is not an error
+            return false;
+        } catch (IOException | GeoIp2Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private boolean lookupIspData(InetAddress addr, GeoIpEntry.Builder builder) {
+        if (ispDatabaseReader == null) {
+            return false;
+        }
+        try {
+            IspResponse response = ispDatabaseReader.isp(addr);
+
+            builder.setIsp(response.getIsp())
+                    .setOrganization(response.getOrganization())
+                    .setAsn(response.getAutonomousSystemNumber())
+                    .setAsnOrganization(response.getAutonomousSystemOrganization());
+            return true;
+
+        } catch (AddressNotFoundException e) {
+            // no ISP information found, this is not an error
+            return false;
         } catch (IOException | GeoIp2Exception e) {
             throw new RuntimeException(e);
         }

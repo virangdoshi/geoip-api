@@ -3,11 +3,19 @@
 
 This project provides a simple web service which returns geolocation information for a given IP address.
 
-Geolocation data is loaded from the GeoIP2 City database (commercial) or
-[GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) database by Maxmind. The database file is not included in
-this project. When running this service as a docker container, mount the database file as `/srv/GeoLite2-City.mmdb`
-(or, if you mount the file at a different location inside the container, set the environment variable `DB_FILE` to the
-location).
+The service loads location information from Maxmind's GeoIP2 City (commercial) or
+[GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) database; and ISP information from Maxmind's GeoIP2 ISP
+database.
+
+The database files are not included in this project. The location of the files can be specified using environment
+variables:
+
+| Variable | Description | Default value |
+| -------- | ----------- | ------------- |
+| CITY_DB_FILE | The location of the GeoIP2 City or GeoLite2 database file. | `/srv/GeoLite2-City.mmdb` |
+| ISP_DB_FILE | The location of the GeoIP2 ISP database file. | (none) |
+
+At least one of the database files must be provided.
 
 ## Running the container
 

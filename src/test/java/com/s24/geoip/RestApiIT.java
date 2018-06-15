@@ -2,9 +2,11 @@ package com.s24.geoip;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.AdditionalMatchers.not;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
+import java.net.InetAddress;
 import java.util.Map;
 
 import org.junit.Before;
@@ -34,17 +36,21 @@ public class RestApiIT {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @MockBean
-    private DatabaseReader databaseReader;
+    @MockBean(name = "cityDatabaseReader")
+    private DatabaseReader cityDatabaseReader;
+
+    @MockBean(name = "ispDatabaseReader")
+    private DatabaseReader ispDatabaseReader;
 
     @Before
     public void setUp() throws Exception {
-        when(databaseReader.city(eq(InetAddresses.forString("192.0.2.1")))).thenReturn(
+        when(cityDatabaseReader.city(eq(InetAddresses.forString("192.0.2.1")))).thenReturn(
                 new CityResponse(null, null,
                         new Country(null, 0, 0, "ZZ", null),
                         null, null, null, null, null, null, null));
-        when(databaseReader.city(not(eq(InetAddresses.forString("192.0.2.1")))))
+        when(cityDatabaseReader.city(not(eq(InetAddresses.forString("192.0.2.1")))))
                 .thenThrow(new AddressNotFoundException("test"));
+        when(ispDatabaseReader.isp(any(InetAddress.class))).thenThrow(new AddressNotFoundException("test"));
     }
 
     @Test

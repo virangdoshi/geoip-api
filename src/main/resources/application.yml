@@ -1,4 +1,4 @@
-DB_FILE: /srv/GeoLite2-City.mmdb
+CITY_DB_FILE: /srv/GeoLite2-City.mmdb
 server:
   tomcat:
     max-threads: 16
