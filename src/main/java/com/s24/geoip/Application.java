@@ -40,13 +40,17 @@ public class Application {
     @ConditionalOnProperty("CITY_DB_FILE")
     public DatabaseReader cityDatabaseReader(@Value("${CITY_DB_FILE}") String dbFileName) throws IOException {
         File file = new File(dbFileName);
-        return new DatabaseReader.Builder(file).withCache(new CHMCache()).build();
+        DatabaseReader bean = new DatabaseReader.Builder(file).withCache(new CHMCache()).build();
+        logger.info("Loaded city database {} (database build date: {})", file, bean.getMetadata().getBuildDate());
+        return bean;
     }
 
     @Bean(name = "ispDatabaseReader")
     @ConditionalOnProperty("ISP_DB_FILE")
     public DatabaseReader ispDatabaseReader(@Value("${ISP_DB_FILE}") String dbFileName) throws IOException {
         File file = new File(dbFileName);
-        return new DatabaseReader.Builder(file).withCache(new CHMCache()).build();
+        DatabaseReader bean = new DatabaseReader.Builder(file).withCache(new CHMCache()).build();
+        logger.info("Loaded ISP database {} (database build date: {})", file, bean.getMetadata().getBuildDate());
+        return bean;
     }
 }
