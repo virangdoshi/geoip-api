@@ -17,11 +17,19 @@ variables:
 
 At least one of the database files must be provided.
 
+## Building the project
+
+Build the Java application by running
+
+    ./mvnw clean verify
+    
+No create the Docker image:
+
+    docker build -t shopping24/geoip-api .
+
 ## Running the container
 
-    docker run -p 8080:8080 \
-        -v /path/to/GeoLite2-City.mmdb:/srv/GeoLite2-City.mmdb \
-        shopping24/geoip-api
+    docker run -p 8080:8080 -v /path/to/GeoLite2-City.mmdb:/srv/GeoLite2-City.mmdb shopping24/geoip-api
 
 ## Using the API
 
@@ -34,11 +42,7 @@ When the container is running, you can query it via simple HTTP GET requests:
         "longitude":"-97.822"
     }
 
-## Building the project
 
-Build the container image by calling:
-
-    ./mvnw clean verify
 
 ## Contributing
 
