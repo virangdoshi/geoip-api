@@ -25,11 +25,11 @@ Build the Java application by running
     
 No create the Docker image:
 
-    docker build -t shopping24/geoip-api .
+    docker build -t s24/geoip-api .
 
 ## Running the container
 
-    docker run -p 8080:8080 -v /path/to/GeoLite2-City.mmdb:/srv/GeoLite2-City.mmdb shopping24/geoip-api
+    docker run -p 8080:8080 -v /path/to/GeoLite2-City.mmdb:/srv/GeoLite2-City.mmdb s24/geoip-api
 
 ## Using the API
 
