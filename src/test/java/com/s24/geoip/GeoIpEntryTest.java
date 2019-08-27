@@ -1,13 +1,13 @@
 package com.s24.geoip;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class GeoIpEntryTest {
 
     @Test
-    public void testGetters() throws Exception {
+    public void testGetters() {
         GeoIpEntry entry = new GeoIpEntry.Builder()
                 .setCountry("country")
                 .setStateprov("region")
@@ -21,15 +21,15 @@ public class GeoIpEntryTest {
                 .setAsnOrganization("asnOrganization")
                 .build();
 
-        assertEquals("country", entry.getCountry());
-        assertEquals("region", entry.getStateprov());
-        assertEquals("city", entry.getCity());
-        assertEquals("latitude", entry.getLatitude());
-        assertEquals("longitude", entry.getLongitude());
-        assertEquals("timezoneName", entry.getTimezone());
-        assertEquals("isp", entry.getIsp());
-        assertEquals("organization", entry.getOrganization());
-        assertEquals(Integer.valueOf(64512), entry.getAsn());
-        assertEquals("asnOrganization", entry.getAsnOrganization());
+        assertThat(entry.getCountry()).isEqualTo("country");
+        assertThat(entry.getStateprov()).isEqualTo("region");
+        assertThat(entry.getCity()).isEqualTo("city");
+        assertThat(entry.getLatitude()).isEqualTo("latitude");
+        assertThat(entry.getLongitude()).isEqualTo("longitude");
+        assertThat(entry.getTimezone()).isEqualTo("timezoneName");
+        assertThat(entry.getIsp()).isEqualTo("isp");
+        assertThat(entry.getOrganization()).isEqualTo("organization");
+        assertThat(entry.getAsn()).isEqualTo(Integer.valueOf(64512));
+        assertThat(entry.getAsnOrganization()).isEqualTo("asnOrganization");
     }
 }

@@ -1,28 +1,33 @@
 package com.s24.geoip.web;
 
-import static java.util.Objects.requireNonNull;
+import com.s24.geoip.GeoIpEntry;
+import com.s24.geoip.GeolocationProvider;
 
 import java.net.InetAddress;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.s24.geoip.GeoIpEntry;
-import com.s24.geoip.GeolocationProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Provides a Geo Lookup service for IPv4 and IPv6 addresses with the help of DB-IP.
  *
- * @author Shopping24 GmbH, Torsten Bøgh Köster (@tboeghk)
+ * @author shopping24 GmbH, Torsten Bøgh Köster (@tboeghk)
  */
-@Controller
+@RestController
 public class GeoIpRestController {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -31,7 +36,7 @@ public class GeoIpRestController {
 
     /**
      * Creates a controller that serves the geolocations from the given provider.
-     * 
+     *
      * @param geolocations
      *            the geolocation provider.
      */
@@ -40,24 +45,17 @@ public class GeoIpRestController {
         this.geolocations = requireNonNull(geolocations);
     }
 
-    @RequestMapping(value = { "/", "/favicon.ico", "/robots.txt" })
-    public ResponseEntity handleKnownNotFounds() {
+    @GetMapping({"/", "/favicon.ico", "/robots.txt"})
+    public ResponseEntity<Void> handleKnownNotFounds() {
         return ResponseEntity.notFound().build();
     }
 
     /**
      * Lookup the geolocation information for an ip address.
      */
-    @RequestMapping(value = "/{address:.+}", method = RequestMethod.GET)
-    public ResponseEntity lookup(@PathVariable InetAddress address) {
-        GeoIpEntry result = geolocations.lookup(address);
-        if (result != null) {
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(result);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/{address:.+}")
+    public ResponseEntity<GeoIpEntry> lookup(@PathVariable InetAddress address) {
+        return ResponseEntity.of(geolocations.lookup(address));
     }
 
     @ExceptionHandler(InvalidIpAddressException.class)

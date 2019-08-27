@@ -1,5 +1,5 @@
 # IP Geolocation REST API
-![travis-ci](https://travis-ci.org/shopping24/geoip-dbip-rest-api.svg)
+![travis-ci](https://travis-ci.org/shopping24/geoip-api.svg)
 
 This project provides a simple web service which returns geolocation information for a given IP address.
 
@@ -38,7 +38,7 @@ When the container is running, you can query it via simple HTTP GET requests:
 
 Build the container image by calling:
 
-    mvn clean verify
+    ./mvnw clean verify
 
 ## Contributing
 

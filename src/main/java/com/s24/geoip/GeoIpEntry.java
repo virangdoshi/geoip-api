@@ -1,19 +1,19 @@
 package com.s24.geoip;
 
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.base.MoreObjects;
+
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 /**
  * A geolocation database entry.
  */
 @JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, isGetterVisibility = NONE)
 @JsonInclude(NON_EMPTY)
-public final class GeoIpEntry {
+public class GeoIpEntry {
 
     private final String country;
     private final String stateprov;
@@ -100,7 +100,7 @@ public final class GeoIpEntry {
     /**
      * Builder for {@link GeoIpEntry} instances.
      */
-    public static final class Builder {
+    public static class Builder {
         private String country;
         private String stateprov;
         private String city;

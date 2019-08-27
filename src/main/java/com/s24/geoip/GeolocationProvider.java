@@ -1,6 +1,7 @@
 package com.s24.geoip;
 
 import java.net.InetAddress;
+import java.util.Optional;
 
 /**
  * Provides location information for an IP address.
@@ -14,5 +15,5 @@ public interface GeolocationProvider {
      * @param addr
      *            the IP address.
      */
-    GeoIpEntry lookup(InetAddress addr);
+    Optional<GeoIpEntry> lookup(InetAddress addr);
 }
