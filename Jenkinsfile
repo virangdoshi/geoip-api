@@ -2,6 +2,14 @@ pipeline {
     agent {
         dockerfile {
             dir 'build'
+            args """
+                  --group-add 999
+                  --network=host
+                  -v /etc/passwd:/etc/passwd
+                  -v /etc/group:/etc/group
+                  -v /var/run/docker.sock:/var/run/docker.sock
+                  -v ${JENKINS_HOME}/.m2:/${JENKINS_HOME}/.m2
+                  """
         }
     }
 
