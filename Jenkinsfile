@@ -36,7 +36,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t s24/geoip-api ."
+                sh 'docker build -t s24/geoip-api .'
             }
         }
     }

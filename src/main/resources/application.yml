@@ -1,12 +1,3 @@
-CITY_DB_FILE: /srv/GeoLite2-City.mmdb
-server:
-  tomcat:
-    max-threads: 16
-    accesslog:
-      enabled: true
-      directory: /dev
-      file-date-format:
-      prefix: stdout
-      suffix:
-      rotate: false
-      request-attributes-enabled: true
+CITY_DB_FILE: /srv/GeoIP2-City-Europe.mmdb
+ISP_DB_FILE: /srv/GeoIP2-ISP.mmdb
+server.http2.enabled: true

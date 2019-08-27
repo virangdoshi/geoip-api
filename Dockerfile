@@ -4,6 +4,6 @@ EXPOSE 8080
 
 COPY target/*.jar /opt/geoip-api.jar
 
-HEALTHCHECK CMD curl -f http://localhost:8080/8.8.8.8
+HEALTHCHECK CMD curl -f http://localhost:8080/actuator/health
 
 CMD exec java ${JAVA_GC_OPTS} ${JAVA_OPTS} -jar /opt/geoip-api.jar
