@@ -28,5 +28,5 @@ jobs:
     - name: Push to Docker Hub
       uses: actions/docker/cli@master
       with:
-        args: "push observabilitystack/geoip-api:$(date +%Y-%V)"
+        args: "push observabilitystack/geoip-api:$(date +%Y-%V) observabilitystack/geoip-api:latest"
 
