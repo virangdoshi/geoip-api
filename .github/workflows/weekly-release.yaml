@@ -19,5 +19,5 @@ jobs:
     - name: Build Docker image
       uses: actions/docker/cli@master
       with:
-        args = "build -t observabilitystack/geoip-api:latest -t observabilitystack/geoip-api:$(date +%Y-%V) ."
+        args: "build -t observabilitystack/geoip-api:latest -t observabilitystack/geoip-api:$(date +%Y-%V) ."
 
