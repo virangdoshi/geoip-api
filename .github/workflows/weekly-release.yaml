@@ -20,4 +20,13 @@ jobs:
       uses: actions/docker/cli@master
       with:
         args: "build -t observabilitystack/geoip-api:latest -t observabilitystack/geoip-api:$(date +%Y-%V) ."
+    - name: Log into Docker Hub
+      uses: "actions/docker/login@master"
+      with:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Push to Docker Hub
+      uses: actions/docker/cli@master
+      with:
+        args: "push observabilitystack/geoip-api:$(date +%Y-%V)"
 
