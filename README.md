@@ -2,6 +2,7 @@
 
 ![travis-ci](https://travis-ci.org/observabilitystack/geoip-api.svg?branch=master)
 ![docker-pulls](https://img.shields.io/docker/pulls/observabilitystack/geoip-api)
+![apache license](https://img.shields.io/github/license/observabilitystack/geoip-api)
 
 This project provides a simple REST web service which returns geolocation information for a given IP address. The service loads location information from [Maxminds GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) or GeoIP2 City (commercial) database.
 
@@ -45,3 +46,6 @@ We're looking forward to your comments, issues and pull requests!
 ## License
 
 This project is licensed under the [Apache License, Version 2](http://www.apache.org/licenses/LICENSE-2.0.html).
+
+This product includes GeoLite2 data created by MaxMind, available from
+<a href="https://www.maxmind.com">https://www.maxmind.com</a>.
