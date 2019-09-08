@@ -9,13 +9,15 @@ You can use this project in a microservice infrastructure if you have multiple s
 
 ## Running the container
 
+The Docker image available on Docker Hub comes with a recent [GeoLite2 city database](https://dev.maxmind.com/geoip/geoip2/geolite2/). The container is built every week with a recent version of the database.
+
 ```
 $ docker run -p 8080:8080 observabilitystack/geoip-api:latest
 ```
 
 ### Using a custom (commercial) database
 
-Using a commercial [Maxmind GeoIP2 City]
+When running in production, using a commercial [Maxmind GeoIP2 City database](https://www.maxmind.com/en/geoip2-city) is highly recommeded. You can mount the database in _mmdb_ format into the container. The location of the database can be customized using the following variables:
 
 | Variable | Description | Default value |
 | -------- | ----------- | ------------- |
