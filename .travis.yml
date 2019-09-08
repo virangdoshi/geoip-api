@@ -19,7 +19,7 @@ script:
 
 after_success:
 - if [ "${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}" == "master" ]; then
-- docker login -u $DOCKER_USER -p $DOCKER_PASS
+- docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 - docker push observabilitystack/geoip-api:latest
 - docker push observabilitystack/geoip-api:$(date +%Y-%V)
 - fi
