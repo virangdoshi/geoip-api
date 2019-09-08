@@ -3,35 +3,25 @@
 ![travis-ci](https://travis-ci.org/observabilitystack/geoip-api.svg?branch=master)
 ![docker-pulls](https://img.shields.io/docker/pulls/observabilitystack/geoip-api)
 
-This project provides a simple web service which returns geolocation information for a given IP address.
+This project provides a simple REST web service which returns geolocation information for a given IP address. The service loads location information from [Maxminds GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) or GeoIP2 City (commercial) database.
 
-The service loads location information from Maxmind's GeoIP2 City (commercial) or
-[GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) database; and ISP information from Maxmind's GeoIP2 ISP
-database.
+You can use this project in a microservice infrastructure if you have multiple services requesting geolocation data. This service can be used together with the [Logstash http filter plugin](https://www.elastic.co/guide/en/logstash/current/plugins-filters-http.html) to enrich log data.
 
-The database files are not included in this project. The location of the files can be specified using environment
-variables:
+## Running the container
+
+```
+$ docker run -p 8080:8080 observabilitystack/geoip-api:latest
+```
+
+### Using a custom (commercial) database
+
+Using a commercial [Maxmind GeoIP2 City]
 
 | Variable | Description | Default value |
 | -------- | ----------- | ------------- |
 | CITY_DB_FILE | The location of the GeoIP2 City or GeoLite2 database file. | `/srv/GeoLite2-City.mmdb` |
 | ISP_DB_FILE | The location of the GeoIP2 ISP database file. | (none) |
 
-At least one of the database files must be provided.
-
-## Building the project
-
-Build the Java application by running
-
-    ./mvnw clean verify
-    
-No create the Docker image:
-
-    docker build -t s24/geoip-api .
-
-## Running the container
-
-    docker run -p 8080:8080 -v /path/to/GeoLite2-City.mmdb:/srv/GeoLite2-City.mmdb s24/geoip-api
 
 ## Using the API
 
