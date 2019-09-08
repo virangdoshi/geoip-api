@@ -1,8 +1,7 @@
 # IP Geolocation REST API
 
-![](https://github.com/observabilitystack/geoip-api/workflows/.github/workflows/weekly-release.yaml/badge.svg)
-
-![travis-ci](https://travis-ci.org/shopping24/geoip-api.svg)
+![travis-ci](https://travis-ci.org/observabilitystack/geoip-api.svg?branch=master)
+![docker-pulls](https://img.shields.io/docker/pulls/observabilitystack/geoip-api)
 
 This project provides a simple web service which returns geolocation information for a given IP address.
 
