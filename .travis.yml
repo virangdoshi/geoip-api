@@ -13,7 +13,7 @@ env:
   - secure: qqrbFmYRcM3EKTkKmA2qIR72ZYed5625lfpfIvFb3E7+8jXvpvhwDphoUucEID7apgqdf9aOU6/HQ7eNMPs6KMmL6Gmg1fmFDj1de6aK4wVkGWdokRQIA34G8+J7YHapad/7jXWR5nEWOAzbj9BgUb7oXRX4XhVaErJ8trUkbeSlRxERv81EQq4gtUyy+J6xqX54zKw0QcgnHmk9vyhaJdBAXo417XR1Q/O5T9gO0V8onPQBTWktpoxTJIdeM9adq9IbbHWsPCQFLHQa6ETMCeBGZO5JcUvHYWKi1kjV5aEFulOFhAp6pGpj7RAL3grb+Hh7h04ChLMzxwDPrqdRXRRsGcxcLlcL/5fPMy9qrYne3U1D91W70fDY19rqR2QYBEk+LWDzWM8vG5/nKgF3IUrN40nj4jdIL6q4TN8zlhNUgQjAj35ZoynWlNExfRbZaTcxkl1k8X9WOWZlnmKb7xD86REKna8O8H2CMPS+ap7EXD+hb4jkFU3r7vbO4mDaUECw7RuRz/bMJPZ/QHLNUlZQrYloW5Ks8FReF6meuCGQDA4lgu3K3+mlVQ8IULsQIw7gf8hgNSmwkfIHPO5QNfraCoN1frgu5FlQWTxf4RqOsd4Oq14XbpuA/S3CtdlS56wMMuHRlTfx3KO69fcbtK7lkLdgJ4n/ir09byHPxLA=
 
 script:
-- mvn clean verify
+- mvn clean verify -Drevisison=$(date +%Y-%V)
 - docker build -t observabilitystack/geoip-api:latest -t observabilitystack/geoip-api:$(date
   +%Y-%V) .
 
