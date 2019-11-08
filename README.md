@@ -1,4 +1,4 @@
-# IP Geolocation REST API
+# [IP Geolocation REST API](https://github.com/observabilitystack/geoip-api)
 
 ![travis-ci](https://travis-ci.org/observabilitystack/geoip-api.svg?branch=master)
 ![docker-pulls](https://img.shields.io/docker/pulls/observabilitystack/geoip-api)
