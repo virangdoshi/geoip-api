@@ -1,11 +1,12 @@
 FROM openjdk:12.0.2
+ARG MAXMIND_LICENSE_KEY
 
 # place app
 COPY target/*.jar /opt/geoip-api.jar
 
 # download current maxmind databases
 WORKDIR /srv
-RUN curl -sSL https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz | tar -xz && \
+RUN curl -sSL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&suffix=tar.gz&license_key=${MAXMIND_LICENSE_KEY}" | tar -xz && \
     ln -s GeoLite2-City_*/GeoLite2-City.mmdb .
 
 ENV CITY_DB_FILE /srv/GeoLite2-City.mmdb
