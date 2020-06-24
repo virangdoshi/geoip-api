@@ -19,10 +19,11 @@ script:
 
 after_success:
 - if [ "${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}" == "master" ]; then
+- export TRAVIS_TAG=${TRAVIS_TAG:-$(date +%Y-%V)}
 - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 - docker push observabilitystack/geoip-api:latest
-- docker push observabilitystack/geoip-api:$(date +%Y-%V)
-- git tag release-$(date +%Y-%V)
+- docker push observabilitystack/geoip-api:${TRAVIS_TAG}
+- git tag ${TRAVIS_TAG}
 - fi
 
 deploy:
