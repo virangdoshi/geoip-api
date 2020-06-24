@@ -3,9 +3,6 @@ version: 2
 updates:
   - package-ecosystem: "docker"
     directory: "/"
-    allowed_updates:
-      - match:
-          update_type: "security"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
