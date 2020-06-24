@@ -2,7 +2,7 @@ dist: bionic
 
 language: java
 jdk: 
-  - openjdk12
+  - openjdk11
 
 services:
 - docker
