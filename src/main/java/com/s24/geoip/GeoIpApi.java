@@ -17,7 +17,7 @@ import com.maxmind.geoip2.DatabaseReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SpringBootApplication
+@SpringBootApplication(proxyBeanMethods = false)
 public class GeoIpApi {
 
     private static final Logger logger = LoggerFactory.getLogger(GeoIpApi.class);
