@@ -10,6 +10,6 @@ RUN curl -sSL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLit
     ln -s GeoLite2-City_*/GeoLite2-City.mmdb .
 
 ENV CITY_DB_FILE /srv/GeoLite2-City.mmdb
-HEALTHCHECK CMD curl -f http://localhost:8080/actuator/health
+HEALTHCHECK --interval=5s --timeout=2s CMD curl -f http://localhost:8080/actuator/health
 EXPOSE 8080
 CMD exec java ${JAVA_GC_OPTS} ${JAVA_OPTS} -jar /opt/geoip-api.jar
