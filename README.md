@@ -1,4 +1,4 @@
-# [IP Geolocation REST API](https://github.com/observabilitystack/geoip-api)
+# IP Geolocation REST API
 
 [![travis-ci](https://travis-ci.org/observabilitystack/geoip-api.png)](https://travis-ci.org/github/observabilitystack/geoip-api)
 [![docker-pulls](https://img.shields.io/docker/pulls/observabilitystack/geoip-api)](https://hub.docker.com/r/observabilitystack/geoip-api)
@@ -18,9 +18,25 @@ The Docker image available on Docker Hub comes with a recent [GeoLite2 city data
 $ docker run -p 8080:8080 observabilitystack/geoip-api:latest
 ```
 
+The containers on Docker Hub are tagged in _yyyy-MM_ 
+format. The most recent container is tagged as _latest_.
+
+> 💡 Although running containers tagged as _latest_ is
+> not recommended in production, for geoip-api we highly
+> recommend this to have the most up-to-data geoip
+> data.
+
+### More examples
+
+The [`examples`](examples/) folder contains examples how
+to run _geoip-api_ in Docker-Compose or Kubernetes.
+
 ### Using a custom (commercial) database
 
-When running in production, using a commercial [Maxmind GeoIP2 City database](https://www.maxmind.com/en/geoip2-city) is highly recommeded. You can mount the database in _mmdb_ format into the container. The location of the database can be customized using the following variables:
+> ☝️ When running in production, using a commercial [Maxmind GeoIP2 City database](https://www.maxmind.com/en/geoip2-city) is highly recommeded due to it's increased
+precision and general data quality.
+
+You can mount the database in _mmdb_ format into the container. The location of the database can be customized using the following variables:
 
 | Variable | Description | Default value |
 | -------- | ----------- | ------------- |
@@ -32,13 +48,24 @@ When running in production, using a commercial [Maxmind GeoIP2 City database](ht
 
 When the container is running, you can query it via simple HTTP GET requests:
 
-    curl http://localhost:8080/8.8.8.8
-    {
-        "country":"US",
-        "latitude":"37.751",
-        "longitude":"-97.822"
-    }
-
+```bash
+$ curl http://localhost:8080/8.8.8.8
+{
+    "country":"US",
+    "latitude":"37.751",
+    "longitude":"-97.822"
+    "timezone": "America/Chicago"
+}
+$ curl -s "http://localhost:8080/$(curl -s https://ifconfig.me/ip)" 
+{
+    "country":"DE",
+    "stateprov":"Hamburg",
+    "city":"Hamburg",
+    "latitude":"53.5992",
+    "longitude":"10.0436",
+    "timezone":"Europe/Berlin"
+}
+```
 
 
 ## Contributing
