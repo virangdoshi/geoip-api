@@ -1,0 +1,10 @@
+# This is a very basic Docker Compose
+# deployment.
+version: '2.4'
+
+services:
+  geoip:
+    image: observabilitystack/geoip-api:latest
+    mem_limit: 512m
+    ports:
+      - 8080:8080
