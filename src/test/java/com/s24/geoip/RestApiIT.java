@@ -57,7 +57,7 @@ public class RestApiIT {
     public void testRestApiRunningInContainer() {
         ResponseEntity<Map> response = restTemplate.getForEntity(REST_URL, Map.class, "192.0.2.1");
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
+        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
         assertThat(response.getBody().get("country")).isEqualTo("ZZ");
     }
 

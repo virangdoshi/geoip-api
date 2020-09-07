@@ -57,7 +57,7 @@ public class GeoIpRestControllerTest {
     public void testIpv4Address() throws Exception {
         mockMvc.perform(get("/192.168.1.1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(content().json("{\"country\":\"ZZ\"}"));
     }
 
@@ -65,7 +65,7 @@ public class GeoIpRestControllerTest {
     public void testIpv6Address() throws Exception {
         mockMvc.perform(get("/2001:db8:1::1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(content().json("{\"country\":\"ZZ\"}"));
     }
 
