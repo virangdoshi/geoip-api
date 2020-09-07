@@ -1,8 +1,10 @@
 # [IP Geolocation REST API](https://github.com/observabilitystack/geoip-api)
 
-![travis-ci](https://travis-ci.org/observabilitystack/geoip-api.svg?branch=master)
-![docker-pulls](https://img.shields.io/docker/pulls/observabilitystack/geoip-api)
+[![travis-ci](https://travis-ci.org/observabilitystack/geoip-api.png)](https://travis-ci.org/github/observabilitystack/geoip-api)
+[![docker-pulls](https://img.shields.io/docker/pulls/observabilitystack/geoip-api)](https://hub.docker.com/r/observabilitystack/geoip-api)
 ![apache license](https://img.shields.io/github/license/observabilitystack/geoip-api)
+
+> ♻️ this is the official and maintained fork of the original [@shopping24](https://github.com/shopping24) repository maintained by [@tboeghk](https://thiswayup.de).
 
 This project provides a simple REST web service which returns geolocation information for a given IP address. The service loads location information from [Maxminds GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) or GeoIP2 City (commercial) database.
 
