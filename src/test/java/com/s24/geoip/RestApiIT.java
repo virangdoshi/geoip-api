@@ -72,4 +72,22 @@ public class RestApiIT {
         ResponseEntity<String> response = restTemplate.getForEntity(REST_URL, String.class, "invalid");
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
+
+    @Test
+    public void testActuator() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/actuator", String.class, "invalid");
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void testActuatorHealth() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/actuator/health", String.class, "invalid");
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+    
+    @Test
+    public void testActuatorPrometheus() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/actuator/prometheus", String.class, "invalid");
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
 }
