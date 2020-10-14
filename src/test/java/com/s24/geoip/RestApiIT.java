@@ -19,6 +19,7 @@ import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.record.Country;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,6 +30,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Disabled
 public class RestApiIT {
 
     private static final String REST_URL = "/{address}";
