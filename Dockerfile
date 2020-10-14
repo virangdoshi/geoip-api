@@ -5,7 +5,7 @@ ADD . /build
 WORKDIR /build
  
 # For SDKMAN to work we need unzip & zip
-RUN yum -y update && yum -y install unzip zip
+RUN yum -y install unzip zip
 RUN \
     # Install SDKMAN
     curl -s "https://get.sdkman.io" | bash; \
@@ -28,7 +28,8 @@ ARG MAXMIND_LICENSE_KEY
 # download current maxmind databases
 WORKDIR /srv
 #RUN apk add curl && \
-RUN curl -sSL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&suffix=tar.gz&license_key=${MAXMIND_LICENSE_KEY}" | tar -xz && \
+RUN yum install -y tar gzip && \
+    curl -sSL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&suffix=tar.gz&license_key=${MAXMIND_LICENSE_KEY}" | tar -xz && \
     ln -s GeoLite2-City_*/GeoLite2-City.mmdb .
 
 # place app
