@@ -46,7 +46,7 @@ You can mount the database in _mmdb_ format into the container. The location of 
 
 ## Using the API
 
-When the container is running, you can query it via simple HTTP GET requests:
+When the container is running, you can query it via simple HTTP GET requests: 
 
 ```bash
 $ curl http://localhost:8080/8.8.8.8
