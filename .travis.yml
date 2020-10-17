@@ -19,7 +19,7 @@ script:
 
 before_deploy:
   - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +%Y-%V)}
-  - GIT_COMMITTER_DATE=$(date -R) git tag ${TRAVIS_TAG} -m '${TRAVIS_TAG}'
+  - GIT_COMMITTER_DATE=$(date -R) git tag -fm '${TRAVIS_TAG}' ${TRAVIS_TAG}
 
 deploy:
   - provider: script
