@@ -2,17 +2,12 @@ package com.s24.geoip;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.junit.Assert.assertThat;
 
 import java.net.InetAddress;
 
-import com.google.common.net.InetAddresses;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.AddressNotFoundException;
-import com.maxmind.geoip2.model.CityResponse;
-import com.maxmind.geoip2.record.Country;
 
 import org.junit.Before;
 import org.junit.Test;
