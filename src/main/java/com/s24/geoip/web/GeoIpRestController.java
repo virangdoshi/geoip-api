@@ -54,7 +54,7 @@ public class GeoIpRestController {
      * Lookup the geolocation information for an ip address.
      */
 
-    @GetMapping("/{address}")
+    @GetMapping("/{address:.+}")
     public ResponseEntity<GeoIpEntry> lookup(@PathVariable("address") InetAddress address) {
         return ResponseEntity.of(geolocations.lookup(address));
     }

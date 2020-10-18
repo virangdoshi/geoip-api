@@ -29,7 +29,7 @@ ARG MAXMIND_LICENSE_KEY
 WORKDIR /srv
 #RUN apk add curl && \
 RUN yum install -y tar gzip && \
-    curl -sSL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&suffix=tar.gz&license_key=${MAXMIND_LICENSE_KEY}" | tar -xz && \
+    curl -sfSL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&suffix=tar.gz&license_key=${MAXMIND_LICENSE_KEY}" | tar -xz && \
     ln -s GeoLite2-City_*/GeoLite2-City.mmdb .
 
 # place app
