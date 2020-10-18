@@ -22,7 +22,7 @@ RUN \
 RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && mvn -P native clean package
 
 # run stage
-FROM oraclelinux:7-slim
+FROM centos:7.8.2003
 ARG MAXMIND_LICENSE_KEY
 
 # download current maxmind databases
@@ -36,6 +36,6 @@ RUN yum install -y tar gzip && \
 COPY --from=builder "/build/target/geoip-api" /srv/geoip-api
 
 ENV CITY_DB_FILE /srv/GeoLite2-City.mmdb
-HEALTHCHECK --interval=5s --timeout=2s CMD curl -f http://localhost:8080/actuator/health
+HEALTHCHECK --interval=5s --timeout=1s CMD curl -f http://localhost:8080/actuator/health
 EXPOSE 8080
 CMD exec /srv/geoip-api
