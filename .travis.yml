@@ -24,7 +24,7 @@ before_deploy:
 
 deploy:
   - provider: script
-    script: bash push-to-dockerhub.sh
+    script: ./push-to-dockerhub.sh
     on:
       branch: master
   - provider: releases
