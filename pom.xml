@@ -167,7 +167,7 @@
                                 -J-Xmx4G 
                                 -H:+TraceClassInitialization 
                                 -H:+ReportExceptionStackTraces
-                                -H:ReflectionConfigurationFiles=/build/src/main/graalvm/reflectconfig.json
+                                -H:ReflectionConfigurationFiles=/build/src/main/resources/reflection-config.json
                                 -Dspring.graal.remove-unused-autoconfig=true 
                                 -Dspring.graal.remove-yaml-support=true
                             </buildArgs>
