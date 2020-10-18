@@ -15,7 +15,8 @@ env:
 
 script:
 - mvn clean verify -Drevisison=$(date +%Y-%V)
-- docker build --build-arg MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY} -t observabilitystack/geoip-api:latest -t observabilitystack/geoip-api:$(date +%Y-%V) .
+- docker build --build-arg MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY} -t observabilitystack/geoip-api:latest -t observabilitystack/geoip-api:native -t observabilitystack/geoip-api:$(date +%Y-%V) .
+- ./test-native-image.sh
 
 before_deploy:
   - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +%Y-%V)}
@@ -23,7 +24,7 @@ before_deploy:
 
 deploy:
   - provider: script
-    script: bash push-to-dockerhub.sh
+    script: ./push-to-dockerhub.sh
     on:
       branch: master
   - provider: releases
