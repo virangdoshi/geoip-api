@@ -4,33 +4,19 @@ language: java
 jdk: 
   - openjdk11
 
+services:
+- docker
+
 env:
   global:
   - secure: ipAwRljZXXi09usPSOuUQT7lViUKWrt1gYPyTIP2POo2TJxhI97TN6WzYoj2nkSLtfulR73yQy72kS0h7zM0dBCndO9S23z2qgNfV6FsF5Eo3JFLgKr9tnaGeMjL05oW0VaHWQzk5lXFD95Er88YJreQbbge80F5Xr5tSQs3+C/LdOfqzdzS2OSaAiV/E8aA9RokwkR+a4ium3zewz4jfyEk17KL8wzPI5aO9xhxbi0YA96+DN/jDG5Cb9TeQQ3zuoXav69r5+BcFD5PpVwEenxe2SUnrp3V7CCwxzXudHiKVugJS+pNgIPo/bxRlNPktSRMkCokFd6x27D1ffMs/0ZIfV3OEWK+7WwOuYQjd6f3ZN9Kjp/7fHZOpEXgSzaxy0AekijJYh4lRnDh/NFX05dd+DRZ+qwghYrzPH5f4Sx1+GVT2HGzST8ybgOUYf805VqjLrhNLaTiFig1OoEwRjFmTc9BtbaBv/+4vVOVTODLeEX95s9ZOb/6QYDciLza25yxrZwSenlReunKQ4g169F5LzDI7rs9ZuRwZ0EH8hcgGi6zXGYDiz3eXboT3jYNmq1F75mAcZPqOUFGGd3LPxj4cpLWEjvC+h1KmlzsmgCTbCv5iJnypBHjPo+TmyL8n1t+pidLkFaHLJBP/2mfG7yrrU3YXo7zkZIu3AF9Yko=
   - secure: qqrbFmYRcM3EKTkKmA2qIR72ZYed5625lfpfIvFb3E7+8jXvpvhwDphoUucEID7apgqdf9aOU6/HQ7eNMPs6KMmL6Gmg1fmFDj1de6aK4wVkGWdokRQIA34G8+J7YHapad/7jXWR5nEWOAzbj9BgUb7oXRX4XhVaErJ8trUkbeSlRxERv81EQq4gtUyy+J6xqX54zKw0QcgnHmk9vyhaJdBAXo417XR1Q/O5T9gO0V8onPQBTWktpoxTJIdeM9adq9IbbHWsPCQFLHQa6ETMCeBGZO5JcUvHYWKi1kjV5aEFulOFhAp6pGpj7RAL3grb+Hh7h04ChLMzxwDPrqdRXRRsGcxcLlcL/5fPMy9qrYne3U1D91W70fDY19rqR2QYBEk+LWDzWM8vG5/nKgF3IUrN40nj4jdIL6q4TN8zlhNUgQjAj35ZoynWlNExfRbZaTcxkl1k8X9WOWZlnmKb7xD86REKna8O8H2CMPS+ap7EXD+hb4jkFU3r7vbO4mDaUECw7RuRz/bMJPZ/QHLNUlZQrYloW5Ks8FReF6meuCGQDA4lgu3K3+mlVQ8IULsQIw7gf8hgNSmwkfIHPO5QNfraCoN1frgu5FlQWTxf4RqOsd4Oq14XbpuA/S3CtdlS56wMMuHRlTfx3KO69fcbtK7lkLdgJ4n/ir09byHPxLA=
   - secure: r7sxCojv0MhB2Atsa0R0kDoJYHQs+SxslRTpAEKj+nHwV6oKClBvbQpibLUYBbjSwq78C5P7l+R+ckuhQYmQYqRxTTsU3LHyIpWBDaiDuQM0HwM2pGgn84GARfecdgLGXUJV17dA71SpSz4FCq/0He1AB5haxnQn2pDmT+wgi2ROMr5ZuQW4pIh6LApBIzcg3oWWt1lj4fZGcG2ur7ZsTbjOt0wUbVQ6QpkgueHAaLqBFYnaEtPVkpMLoYpqItU2Ct8FajBGvTXo160Tych+3v9aGiHDNprqUXcnJgu4FmYOFrLVBOwQqLCRbjm0SGkX1gMuHFWH9dgJ7Ze4u+BFvZkbo8iYQuHVbZQPwdUu2TmFf3KkbdBn6+CisufQ0iVME8HqjlPj+MzAKM7NT8VLfWUokuS5asNFR8vpFMbaNNiWEHAg7N6fjiNKZIHZRjrJUlpxqjvetG5mW1upFuR3x0C9wkBnzCf+piFgGfGfurYNyFTtwoL8bFje44VwxCS+lx/0tCj3d1MaW75YCN2pcfDRnY35u+C+FnkHZT7YITmGAO/flQlY1ointeEKkNjHmLctY/WroB5Bc/5N33mFgCJ1PlDp+8XPUBQ/aAwxVCa68VIY5R5izXIz53zMlyxiyT6jVUT4f891q0d/9uupPOVC3Z05qx7Xc9HIBBbujNo=
 
-before_install:
-  # Install upstream Docker
-  - sudo rm -rf /var/lib/apt/lists/*
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) edge"
-  - sudo apt-get update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
-  - docker version
-
-  # Install buildx plugin
-  - mkdir -vp ~/.docker/cli-plugins/
-  - curl --silent -L "https://github.com/docker/buildx/releases/download/v0.4.2/buildx-v0.4.2.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
-  - chmod a+x ~/.docker/cli-plugins/docker-buildx
-  - docker buildx version
-
 script:
-  - mvn clean verify -Drevisison=$(date +%Y-%V)
-  - docker buildx create --use
-  - docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --build-arg MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY} -t observabilitystack/geoip-api:latest -t observabilitystack/geoip-api:$(date +%Y-%V) .
-  - docker buildx imagetools inspect observabilitystack/geoip-api:latest
-  - ./test-native-image.sh
+- mvn clean verify -Drevisison=$(date +%Y-%V)
+- docker build --build-arg MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY} -t observabilitystack/geoip-api:latest -t observabilitystack/geoip-api:$(date +%Y-%V) .
+- ./test-native-image.sh
 
 before_deploy:
   - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +%Y-%V)}
