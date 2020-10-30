@@ -28,7 +28,7 @@ before_install:
 script:
   - mvn clean verify -Drevisison=$(date +%Y-%V)
   - docker buildx create --use
-  - docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --build-arg MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY} -t observabilitystack/geoip-api:latest -t observabilitystack/geoip-api:$(date +%Y-%V) .
+  - docker buildx build --platform linux/arm64/v8,linux/amd64 --build-arg MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY} -t observabilitystack/geoip-api:latest -t observabilitystack/geoip-api:$(date +%Y-%V) .
   - docker buildx imagetools inspect observabilitystack/geoip-api:latest
   - ./test-native-image.sh
 
