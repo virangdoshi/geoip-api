@@ -22,7 +22,7 @@ RUN \
 RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && mvn -P native clean package
 
 # run stage
-FROM centos:7
+FROM centos:7.8.2003
 ARG MAXMIND_LICENSE_KEY
 
 # download current maxmind databases
