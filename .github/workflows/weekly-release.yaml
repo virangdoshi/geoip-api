@@ -1,4 +1,4 @@
-name: geoip weekly release
+name: geoip-api release
 on:
   workflow_dispatch:
   schedule:
