@@ -196,14 +196,13 @@
                         <artifactId>native-image-maven-plugin</artifactId>
                         <version>${graalvm.version}</version>
                         <configuration>
-                            <!--<buildArgs>
+                            <buildArgs>
                                 -J-Xmx4G 
-                                -H:+TraceClassInitialization 
                                 -H:+ReportExceptionStackTraces
-                                -H:ReflectionConfigurationFiles=/build/src/main/resources/reflection-config.json
+                                -H:ReflectionConfigurationFiles=classes/META-INF/native-image/reflection-config.json
                                 -Dspring.graal.remove-unused-autoconfig=true 
                                 -Dspring.graal.remove-yaml-support=true
-                            </buildArgs>-->
+                            </buildArgs>
                             <imageName>${project.artifactId}</imageName>
                             <mainClass>${start-class}</mainClass>
                         </configuration>
