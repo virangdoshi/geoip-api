@@ -1,4 +1,4 @@
-name: geoip ci build
+name: geoip-api ci build
 
 on: [push, pull_request]
 
