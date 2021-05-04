@@ -5,7 +5,7 @@ ADD . /build
 WORKDIR /build
  
 # build image
-RUN mvn clean package && \
+RUN mvn clean package -DskipTests=true  && \
     mv target/geoip-api-*.jar target/geoip-api.jar
 
 # run stage

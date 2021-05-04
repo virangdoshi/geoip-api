@@ -35,5 +35,5 @@ jobs:
         build-args: |
           MAXMIND_LICENSE_KEY=${{ secrets.MAXMIND_LICENSE_KEY }}
         tags: |
-          observabilitystack/geoip:${{ steps.determine-tag.outputs.tag }}
-          observabilitystack/geoip:latest
+          observabilitystack/geoip-api:${{ steps.determine-tag.outputs.tag }}
+          observabilitystack/geoip-api:latest
