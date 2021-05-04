@@ -1,11 +1,11 @@
 # build stage
-FROM oracle/graalvm-ce:20.2.0-java11 AS builder
+FROM ghcr.io/graalvm/graalvm-ce:java11-21.1.0 AS builder
  
 ADD . /build
 WORKDIR /build
  
 # For SDKMAN to work we need unzip & zip
-RUN yum -y install unzip zip
+RUN microdnf -y install unzip zip
 RUN \
     # Install SDKMAN
     curl -s "https://get.sdkman.io" | bash; \
@@ -22,13 +22,13 @@ RUN \
 RUN source "$HOME/.sdkman/bin/sdkman-init.sh" && mvn -P native clean package
 
 # run stage
-FROM centos:7.8.2003
+FROM oraclelinux:8-slim
 ARG MAXMIND_LICENSE_KEY
 
 # download current maxmind databases
 WORKDIR /srv
 #RUN apk add curl && \
-RUN yum install -y tar gzip && \
+RUN microdnf install -y tar gzip && \
     curl -sfSL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&suffix=tar.gz&license_key=${MAXMIND_LICENSE_KEY}" | tar -xz && \
     ln -s GeoLite2-City_*/GeoLite2-City.mmdb .
 
