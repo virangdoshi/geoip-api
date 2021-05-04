@@ -25,7 +25,7 @@ jobs:
     
     - uses: actions/checkout@v2
 
-    - name: Determine tag
+    - name: determine-tag
       run: echo "::set-output name=tag::$(date +%Y-%V)"
 
     - name: Build and push
@@ -37,5 +37,5 @@ jobs:
         build-args: |
           MAXMIND_LICENSE_KEY=${{ secrets.MAXMIND_LICENSE_KEY }}
         tags: |
-          observabilitystack/geoip:${{ steps.determine_tag.outputs.tag }}
+          observabilitystack/geoip:${{ steps.determine-tag.outputs.tag }}
           observabilitystack/geoip:latest
