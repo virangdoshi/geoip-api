@@ -1,0 +1,24 @@
+name: geoip ci build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - uses: actions/checkout@v2
+
+    - name: Cache maven deps
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: maven-${{ hashFiles('**/pom.xml') }}
+
+    - name: Set up Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    
+    - name: Build JAR from Maven
+      run: mvn clean verify -Drevisison=$(date +%Y-%V)
