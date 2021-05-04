@@ -1,8 +1,23 @@
 package com.s24.geoip;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.AdditionalMatchers.not;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
 import java.net.InetAddress;
 import java.util.Map;
 
+import com.google.common.net.InetAddresses;
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.exception.AddressNotFoundException;
+import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.record.Country;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -10,25 +25,10 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.google.common.net.InetAddresses;
-import com.maxmind.geoip2.DatabaseReader;
-import com.maxmind.geoip2.exception.AddressNotFoundException;
-import com.maxmind.geoip2.model.CityResponse;
-import com.maxmind.geoip2.record.Country;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.AdditionalMatchers.not;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = GeoIpApi.class)
 public class RestApiIT {
 
     private static final String REST_URL = "/{address}";
@@ -42,7 +42,7 @@ public class RestApiIT {
     @MockBean(name = "ispDatabaseReader")
     private DatabaseReader ispDatabaseReader;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         when(cityDatabaseReader.city(eq(InetAddresses.forString("192.0.2.1")))).thenReturn(
                 new CityResponse(null, null,
@@ -71,23 +71,5 @@ public class RestApiIT {
     public void test400ResponseForInvalidInput() {
         ResponseEntity<String> response = restTemplate.getForEntity(REST_URL, String.class, "invalid");
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-    }
-
-    @Test
-    public void testActuator() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/actuator", String.class, "invalid");
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    @Test
-    public void testActuatorHealth() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/actuator/health", String.class, "invalid");
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-    
-    @Test
-    public void testActuatorPrometheus() {
-        ResponseEntity<String> response = restTemplate.getForEntity("/actuator/prometheus", String.class, "invalid");
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }

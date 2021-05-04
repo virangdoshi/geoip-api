@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.4.RELEASE</version>
+        <version>2.4.5</version>
     </parent>
 
     <licenses>
@@ -65,6 +65,8 @@
         <maven.deploy.skip>true</maven.deploy.skip>
 
         <start-class>com.s24.geoip.GeoIpApi</start-class>
+        <graalvm.version>21.1.0</graalvm.version>
+        <spring.native.version>0.9.2</spring.native.version>
     </properties>
 
     <!-- for spring-graal-native -->
@@ -74,12 +76,22 @@
 			<name>Spring Milestones</name>
 			<url>https://repo.spring.io/milestone</url>
 		</repository>
+        <repository>
+            <id>spring-release</id>
+            <name>Spring release</name>
+            <url>https://repo.spring.io/release</url>
+        </repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>spring-milestones</id>
 			<name>Spring Milestones</name>
 			<url>https://repo.spring.io/milestone</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-release</id>
+            <name>Spring release</name>
+            <url>https://repo.spring.io/release</url>
 		</pluginRepository>
 	</pluginRepositories>
 
@@ -117,8 +129,8 @@
         -->
         <dependency>
             <groupId>org.springframework.experimental</groupId>
-            <artifactId>spring-graalvm-native</artifactId>
-            <version>0.7.1</version>
+            <artifactId>spring-native</artifactId>
+            <version>${spring.native.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -144,6 +156,25 @@
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.springframework.experimental</groupId>
+                <artifactId>spring-aot-maven-plugin</artifactId>
+                <version>${spring.native.version}</version>
+                <executions>
+                    <execution>
+                        <id>test-generate</id>
+                        <goals>
+                            <goal>test-generate</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -163,17 +194,18 @@
                     <plugin>
                         <groupId>org.graalvm.nativeimage</groupId>
                         <artifactId>native-image-maven-plugin</artifactId>
-                        <version>20.2.0</version>
+                        <version>${graalvm.version}</version>
                         <configuration>
-                            <buildArgs>
+                            <!--<buildArgs>
                                 -J-Xmx4G 
                                 -H:+TraceClassInitialization 
                                 -H:+ReportExceptionStackTraces
                                 -H:ReflectionConfigurationFiles=/build/src/main/resources/reflection-config.json
                                 -Dspring.graal.remove-unused-autoconfig=true 
                                 -Dspring.graal.remove-yaml-support=true
-                            </buildArgs>
+                            </buildArgs>-->
                             <imageName>${project.artifactId}</imageName>
+                            <mainClass>${start-class}</mainClass>
                         </configuration>
                         <executions>
                             <execution>
