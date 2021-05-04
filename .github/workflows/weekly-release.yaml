@@ -37,3 +37,16 @@ jobs:
         tags: |
           observabilitystack/geoip-api:${{ steps.determine-tag.outputs.tag }}
           observabilitystack/geoip-api:latest
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.determine-tag.outputs.tag }}
+        release_name: ${{ steps.determine-tag.outputs.tag }}
+        body: |
+          Weekly release with updated geoip information
+          as of week ${{ steps.determine-tag.outputs.tag }}.
+        draft: false
+        prerelease: false
