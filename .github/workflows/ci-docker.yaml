@@ -32,5 +32,3 @@ jobs:
         push: false
         build-args: |
           MAXMIND_LICENSE_KEY=${{ secrets.MAXMIND_LICENSE_KEY }}
-        tags: |
-          observabilitystack/geoip:latest

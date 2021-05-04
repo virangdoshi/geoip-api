@@ -1,6 +1,6 @@
 # IP Geolocation REST API
 
-[![travis-ci](https://travis-ci.org/observabilitystack/geoip-api.svg?branch=master)](https://travis-ci.org/github/observabilitystack/geoip-api)
+[![geoip-api ci build](https://github.com/observabilitystack/geoip-api/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/observabilitystack/geoip-api/actions/workflows/ci.yaml)
 [![docker-pulls](https://img.shields.io/docker/pulls/observabilitystack/geoip-api)](https://hub.docker.com/r/observabilitystack/geoip-api)
 ![apache license](https://img.shields.io/github/license/observabilitystack/geoip-api)
 
