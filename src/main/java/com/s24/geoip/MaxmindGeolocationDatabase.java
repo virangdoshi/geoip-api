@@ -58,6 +58,9 @@ public class MaxmindGeolocationDatabase
             Optional.ofNullable(response.getMostSpecificSubdivision())
                     .map(Subdivision::getName)
                     .ifPresent(builder::setStateprov);
+            Optional.ofNullable(response.getMostSpecificSubdivision())
+                    .map(Subdivision::getIsoCode)
+                    .ifPresent(builder::setStateprovCode);
             Optional.ofNullable(response.getCity())
                     .map(City::getName)
                     .ifPresent(builder::setCity);

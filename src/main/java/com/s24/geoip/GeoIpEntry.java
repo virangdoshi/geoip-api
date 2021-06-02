@@ -17,6 +17,7 @@ public class GeoIpEntry {
 
     private final String country;
     private final String stateprov;
+    private final String stateprovCode;
     private final String city;
     private final String latitude;
     private final String longitude;
@@ -27,11 +28,12 @@ public class GeoIpEntry {
     private final Integer asn;
     private final String asnOrganization;
 
-    private GeoIpEntry(String country, String stateprov, String city,
+    private GeoIpEntry(String country, String stateprov, String stateprovCode, String city,
                        String latitude, String longitude, String continent, String timezone,
                        String isp, String organization, Integer asn, String asnOrganization) {
         this.country = country;
         this.stateprov = stateprov;
+        this.stateprovCode = stateprovCode;
         this.city = city;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -49,6 +51,10 @@ public class GeoIpEntry {
 
     public String getStateprov() {
         return stateprov;
+    }
+
+    public String getStateprovCode() {
+        return stateprovCode;
     }
 
     public String getCity() {
@@ -92,6 +98,7 @@ public class GeoIpEntry {
         return MoreObjects.toStringHelper(this)
                 .add("country", country)
                 .add("stateprov", stateprov)
+                .add("stateprovCode", stateprovCode)
                 .add("city", city)
                 .add("continent", continent)
                 .add("latitude", latitude)
@@ -110,6 +117,7 @@ public class GeoIpEntry {
     public static class Builder {
         private String country;
         private String stateprov;
+        private String stateprovCode;
         private String city;
         private String continent;
         private String latitude;
@@ -127,6 +135,10 @@ public class GeoIpEntry {
 
         public Builder setStateprov(String stateprov) {
             this.stateprov = stateprov;
+            return this;
+        }
+        public Builder setStateprovCode(String stateprovCode) {
+            this.stateprovCode = stateprovCode;
             return this;
         }
 
@@ -175,7 +187,7 @@ public class GeoIpEntry {
         }
 
         public GeoIpEntry build() {
-            return new GeoIpEntry(country, stateprov, city, latitude, longitude, continent, timezone, isp, organization, asn,
+            return new GeoIpEntry(country, stateprov, stateprovCode, city, latitude, longitude, continent, timezone, isp, organization, asn,
                     asnOrganization);
         }
     }

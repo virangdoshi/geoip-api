@@ -67,6 +67,7 @@ public class MaxmindGeolocationDatabaseTest {
         GeoIpEntry geoIpEntry = result.get();
         assertThat(geoIpEntry.getCountry()).isNull();
         assertThat(geoIpEntry.getStateprov()).isNull();
+        assertThat(geoIpEntry.getStateprovCode()).isNull();
         assertThat(geoIpEntry.getCity()).isNull();
         assertThat(geoIpEntry.getContinent()).isNull();
         assertThat(geoIpEntry.getLatitude()).isNull();
@@ -85,6 +86,7 @@ public class MaxmindGeolocationDatabaseTest {
         GeoIpEntry geoIpEntry = result.get();
         assertThat(geoIpEntry.getCountry()).isEqualTo("DE");
         assertThat(geoIpEntry.getStateprov()).isEqualTo("Hamburg");
+        assertThat(geoIpEntry.getStateprovCode()).isEqualTo("DE");
         assertThat(geoIpEntry.getCity()).isEqualTo("Hamburg");
         assertThat(geoIpEntry.getContinent()).isEqualTo("EU");
         assertThat(geoIpEntry.getLatitude()).isEqualTo("53.5854");
@@ -104,6 +106,7 @@ public class MaxmindGeolocationDatabaseTest {
         GeoIpEntry geoIpEntry = result.get();
         assertThat(geoIpEntry.getCountry()).isEqualTo("DE");
         assertThat(geoIpEntry.getStateprov()).isEqualTo("Hamburg");
+        assertThat(geoIpEntry.getStateprovCode()).isEqualTo("DE");
         assertThat(geoIpEntry.getCity()).isEqualTo("Hamburg");
         assertThat(geoIpEntry.getContinent()).isEqualTo("EU");
         assertThat(geoIpEntry.getLatitude()).isEqualTo("53.5854");
