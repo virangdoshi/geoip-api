@@ -13,6 +13,7 @@ public class GeoIpEntryTest {
                 .setCountry("country")
                 .setStateprov("region")
                 .setCity("city")
+                .setContinent("continent")
                 .setLatitude("latitude")
                 .setLongitude("longitude")
                 .setTimezone("timezoneName")
@@ -25,6 +26,7 @@ public class GeoIpEntryTest {
         assertThat(entry.getCountry()).isEqualTo("country");
         assertThat(entry.getStateprov()).isEqualTo("region");
         assertThat(entry.getCity()).isEqualTo("city");
+        assertThat(entry.getContinent()).isEqualTo("continent");
         assertThat(entry.getLatitude()).isEqualTo("latitude");
         assertThat(entry.getLongitude()).isEqualTo("longitude");
         assertThat(entry.getTimezone()).isEqualTo("timezoneName");

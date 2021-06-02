@@ -20,6 +20,7 @@ public class GeoIpEntry {
     private final String city;
     private final String latitude;
     private final String longitude;
+    private final String continent;
     private final String timezone;
     private final String isp;
     private final String organization;
@@ -27,13 +28,14 @@ public class GeoIpEntry {
     private final String asnOrganization;
 
     private GeoIpEntry(String country, String stateprov, String city,
-            String latitude, String longitude, String timezone,
-            String isp, String organization, Integer asn, String asnOrganization) {
+                       String latitude, String longitude, String continent, String timezone,
+                       String isp, String organization, Integer asn, String asnOrganization) {
         this.country = country;
         this.stateprov = stateprov;
         this.city = city;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.continent = continent;
         this.timezone = timezone;
         this.isp = isp;
         this.organization = organization;
@@ -65,6 +67,10 @@ public class GeoIpEntry {
         return timezone;
     }
 
+    public String getContinent() {
+        return continent;
+    }
+
     public String getIsp() {
         return isp;
     }
@@ -87,6 +93,7 @@ public class GeoIpEntry {
                 .add("country", country)
                 .add("stateprov", stateprov)
                 .add("city", city)
+                .add("continent", continent)
                 .add("latitude", latitude)
                 .add("longitude", longitude)
                 .add("timezone", timezone)
@@ -104,6 +111,7 @@ public class GeoIpEntry {
         private String country;
         private String stateprov;
         private String city;
+        private String continent;
         private String latitude;
         private String longitude;
         private String timezone;
@@ -124,6 +132,10 @@ public class GeoIpEntry {
 
         public Builder setCity(String city) {
             this.city = city;
+            return this;
+        }
+        public Builder setContinent(String continent) {
+            this.continent = continent;
             return this;
         }
 
@@ -163,7 +175,7 @@ public class GeoIpEntry {
         }
 
         public GeoIpEntry build() {
-            return new GeoIpEntry(country, stateprov, city, latitude, longitude, timezone, isp, organization, asn,
+            return new GeoIpEntry(country, stateprov, city, latitude, longitude, continent, timezone, isp, organization, asn,
                     asnOrganization);
         }
     }
