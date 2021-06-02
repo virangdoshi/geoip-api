@@ -1,11 +1,11 @@
 # build stage
 FROM maven:3.8.1-jdk-11-slim AS builder
- 
+
 ADD . /build
 WORKDIR /build
- 
+
 # build image
-RUN mvn clean package -DskipTests=true  && \
+RUN mvn --batch-mode --no-transfer-progress clean package -DskipTests=true  && \
     mv target/geoip-api-*.jar target/geoip-api.jar
 
 # run stage
