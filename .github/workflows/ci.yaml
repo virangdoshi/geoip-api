@@ -62,7 +62,7 @@ jobs:
     - name: Build native image out of Maven
       run: |
         env|sort
-        mvn --batch-mode --no-transfer-progress spring-boot:build-image
+        mvn -X --batch-mode --no-transfer-progress spring-boot:build-image
       env:
         DOCKER_HOST: ${{ steps.docker.outputs.endpoint }}
 
