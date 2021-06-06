@@ -5,8 +5,7 @@
     <groupId>com.s24</groupId>
     <artifactId>geoip-api</artifactId>
     <name>GeoIP-API</name>
-    <packaging>jar</packaging>
-    <version>${revision}</version>
+    <version>0-SNAPSHOT</version>
     <description>A REST API to query GeoIP databases</description>
     <url>https://github.com/o12stack/geoip-api</url>
 
@@ -55,8 +54,7 @@
     </developers>
 
     <properties>
-        <maven.compiler.release>11</maven.compiler.release>
-        <revision>0-SNAPSHOT</revision>
+        <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -64,41 +62,12 @@
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
 
+        <!-- Spring native configuration -->
         <start-class>com.s24.geoip.GeoIpApi</start-class>
+        <spring-native.version>0.10.0-SNAPSHOT</spring-native.version>
     </properties>
 
-    <!-- for spring-graal-native -->
-    <repositories>
-		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-		</repository>
-        <repository>
-            <id>spring-release</id>
-            <name>Spring release</name>
-            <url>https://repo.spring.io/release</url>
-        </repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>spring-release</id>
-            <name>Spring release</name>
-            <url>https://repo.spring.io/release</url>
-		</pluginRepository>
-	</pluginRepositories>
-
     <dependencies>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>30.1.1-jre</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -110,6 +79,17 @@
         <dependency>
 	        <groupId>io.micrometer</groupId>
 	        <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+			<groupId>org.springframework.experimental</groupId>
+			<artifactId>spring-native</artifactId>
+			<version>${spring-native.version}</version>
+		</dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.1.1-jre</version>
         </dependency>
         <dependency>
             <groupId>com.maxmind.geoip2</groupId>
@@ -133,42 +113,55 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+					<image>
+						<builder>paketobuildpacks/builder:tiny</builder>
+						<env>
+							<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+						</env>
+                        <name>observabilitystack/geoip-api:${project.version}</name>
+                        <pullPolicy>NEVER</pullPolicy>
+					</image>
+                </configuration>
             </plugin>
+            <plugin>
+				<groupId>org.springframework.experimental</groupId>
+				<artifactId>spring-aot-maven-plugin</artifactId>
+				<version>${spring-native.version}</version>
+				<executions>
+					<execution>
+						<id>test-generate</id>
+						<goals>
+							<goal>test-generate</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>native</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.graalvm.nativeimage</groupId>
-                        <artifactId>native-image-maven-plugin</artifactId>
-                        <version>${graalvm.version}</version>
-                        <configuration>
-                            <buildArgs>
-                                -J-Xmx4G
-                                -H:+ReportExceptionStackTraces
-                                -H:ReflectionConfigurationFiles=classes/META-INF/native-image/reflection-config.json
-                                -Dspring.graal.remove-unused-autoconfig=true
-                                -Dspring.graal.remove-yaml-support=true
-                            </buildArgs>
-                            <imageName>${project.artifactId}</imageName>
-                            <mainClass>${start-class}</mainClass>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>native-image</goal>
-                                </goals>
-                                <phase>package</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+    <repositories>
+		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
+		</pluginRepository>
+	</pluginRepositories>
 
 </project>

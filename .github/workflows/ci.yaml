@@ -9,11 +9,12 @@ jobs:
 
     - uses: actions/checkout@v2
 
-    - name: Cache maven deps
+    - name: Cache maven dependencies
       uses: actions/cache@v2
       with:
         path: ~/.m2/repository
-        key: maven-${{ hashFiles('**/pom.xml') }}
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
 
     - name: Set up Java
       uses: actions/setup-java@v2
@@ -22,9 +23,9 @@ jobs:
         distribution: adopt
 
     - name: Build JAR from Maven
-      run: mvn --batch-mode --no-transfer-progress  clean verify -Drevisison=$(date +%Y-%V)
+      run: mvn --batch-mode --no-transfer-progress clean verify
 
-  docker:
+  native:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -50,10 +51,21 @@ jobs:
 
     - uses: actions/checkout@v2
 
-    - name: Build Docker Image
+    - name: Cache maven dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+
+    - name: Build native image out of Maven
+      run: mvn --batch-mode --no-transfer-progress spring-boot:build-image
+
+    - name: Build final Docker image
       uses: docker/build-push-action@v2
       with:
         context: .
+        platforms: linux/amd64,linux/arm64
         push: false
         build-args: |
           MAXMIND_LICENSE_KEY=${{ secrets.MAXMIND_LICENSE_KEY }}

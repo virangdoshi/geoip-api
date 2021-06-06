@@ -51,19 +51,22 @@ When the container is running, you can query it via simple HTTP GET requests:
 ```bash
 $ curl http://localhost:8080/8.8.8.8
 {
-    "country":"US",
-    "latitude":"37.751",
-    "longitude":"-97.822"
-    "timezone": "America/Chicago"
+  "country": "US",
+  "latitude": "37.751",
+  "longitude": "-97.822",
+  "continent": "NA",
+  "timezone": "America/Chicago"
 }
 $ curl -s "http://localhost:8080/$(curl -s https://ifconfig.me/ip)"
 {
-    "country":"DE",
-    "stateprov":"Hamburg",
-    "city":"Hamburg",
-    "latitude":"53.5992",
-    "longitude":"10.0436",
-    "timezone":"Europe/Berlin"
+  "country": "DE",
+  "stateprov": "Free and Hanseatic City of Hamburg",
+  "stateprovCode": "HH",
+  "city": "Hamburg",
+  "latitude": "53.5795",
+  "longitude": "10.0592",
+  "continent": "EU",
+  "timezone": "Europe/Berlin"
 }
 ```
 
