@@ -120,7 +120,6 @@
 							<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
 						</env>
                         <name>observabilitystack/geoip-api:${project.version}</name>
-                        <!--<pullPolicy>NEVER</pullPolicy>-->
 					</image>
                 </configuration>
             </plugin>

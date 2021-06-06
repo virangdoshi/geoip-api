@@ -73,6 +73,7 @@ jobs:
         -Ddocker.username=${{ secrets.DOCKER_USERNAME }} \
         -Ddocker.password=${{ secrets.DOCKER_PASSWORD }} \
         verify spring-boot:build-image
+        docker tag docker.io/observabilitystack/geoip-api:0-SNAPSHOT observabilitystack/geoip-api:0-SNAPSHOT
       env:
         DOCKER_HOST: ${{ steps.docker.outputs.endpoint }}
 

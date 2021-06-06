@@ -9,6 +9,6 @@ RUN apt-get update && \
     mv GeoLite2-City_*/GeoLite2-City.mmdb /srv/GeoLite2-City.mmdb
 
 # Extend existing native image
-FROM docker.io/observabilitystack/geoip-api:0-SNAPSHOT
+FROM observabilitystack/geoip-api:0-SNAPSHOT
 COPY --from=downloader "/srv/GeoLite2-City.mmdb" /srv/GeoLite2-City.mmdb
 ENV CITY_DB_FILE /srv/GeoLite2-City.mmdb
