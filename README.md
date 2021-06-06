@@ -18,7 +18,7 @@ The Docker image available on Docker Hub comes with a recent [GeoLite2 city data
 $ docker run -p 8080:8080 observabilitystack/geoip-api:latest
 ```
 
-The containers on Docker Hub are tagged in _yyyy-MM_ 
+The containers on Docker Hub are tagged in _yyyy-MM_
 format. The most recent container is tagged as _latest_.
 
 > 💡 Although running containers tagged as _latest_ is
@@ -46,7 +46,7 @@ You can mount the database in _mmdb_ format into the container. The location of 
 
 ## Using the API
 
-When the container is running, you can query it via simple HTTP GET requests: 
+When the container is running, you can query it via simple HTTP GET requests:
 
 ```bash
 $ curl http://localhost:8080/8.8.8.8
@@ -56,7 +56,7 @@ $ curl http://localhost:8080/8.8.8.8
     "longitude":"-97.822"
     "timezone": "America/Chicago"
 }
-$ curl -s "http://localhost:8080/$(curl -s https://ifconfig.me/ip)" 
+$ curl -s "http://localhost:8080/$(curl -s https://ifconfig.me/ip)"
 {
     "country":"DE",
     "stateprov":"Hamburg",

@@ -40,7 +40,7 @@ public class MaxmindGeolocationDatabaseTest {
         Country country = new Country(locales, 0, 0, "DE", ImmutableMap.of("DE", "Deutschland"));
         CityResponse cityResponse = new CityResponse(
                 new City(locales, 0, 0, ImmutableMap.of("DE", "Hamburg")),
-                new Continent(locales, null, 0, ImmutableMap.of("DE", "Europa")),
+                new Continent(locales, "EU", 0, ImmutableMap.of("DE", "Europa")),
                 country,
                 new Location(0, 0, 53.5854, 10.0073, 0, 0, "Europe/Berlin"),
                 new MaxMind(),
@@ -67,7 +67,9 @@ public class MaxmindGeolocationDatabaseTest {
         GeoIpEntry geoIpEntry = result.get();
         assertThat(geoIpEntry.getCountry()).isNull();
         assertThat(geoIpEntry.getStateprov()).isNull();
+        assertThat(geoIpEntry.getStateprovCode()).isNull();
         assertThat(geoIpEntry.getCity()).isNull();
+        assertThat(geoIpEntry.getContinent()).isNull();
         assertThat(geoIpEntry.getLatitude()).isNull();
         assertThat(geoIpEntry.getLongitude()).isNull();
         assertThat(geoIpEntry.getTimezone()).isNull();
@@ -84,7 +86,9 @@ public class MaxmindGeolocationDatabaseTest {
         GeoIpEntry geoIpEntry = result.get();
         assertThat(geoIpEntry.getCountry()).isEqualTo("DE");
         assertThat(geoIpEntry.getStateprov()).isEqualTo("Hamburg");
+        assertThat(geoIpEntry.getStateprovCode()).isEqualTo("DE");
         assertThat(geoIpEntry.getCity()).isEqualTo("Hamburg");
+        assertThat(geoIpEntry.getContinent()).isEqualTo("EU");
         assertThat(geoIpEntry.getLatitude()).isEqualTo("53.5854");
         assertThat(geoIpEntry.getLongitude()).isEqualTo("10.0073");
         assertThat(geoIpEntry.getTimezone()).isEqualTo("Europe/Berlin");
@@ -102,7 +106,9 @@ public class MaxmindGeolocationDatabaseTest {
         GeoIpEntry geoIpEntry = result.get();
         assertThat(geoIpEntry.getCountry()).isEqualTo("DE");
         assertThat(geoIpEntry.getStateprov()).isEqualTo("Hamburg");
+        assertThat(geoIpEntry.getStateprovCode()).isEqualTo("DE");
         assertThat(geoIpEntry.getCity()).isEqualTo("Hamburg");
+        assertThat(geoIpEntry.getContinent()).isEqualTo("EU");
         assertThat(geoIpEntry.getLatitude()).isEqualTo("53.5854");
         assertThat(geoIpEntry.getLongitude()).isEqualTo("10.0073");
         assertThat(geoIpEntry.getTimezone()).isEqualTo("Europe/Berlin");
@@ -121,6 +127,7 @@ public class MaxmindGeolocationDatabaseTest {
         assertThat(geoIpEntry.getCountry()).isNull();
         assertThat(geoIpEntry.getStateprov()).isNull();
         assertThat(geoIpEntry.getCity()).isNull();
+        assertThat(geoIpEntry.getContinent()).isNull();
         assertThat(geoIpEntry.getLatitude()).isNull();
         assertThat(geoIpEntry.getLongitude()).isNull();
         assertThat(geoIpEntry.getTimezone()).isNull();

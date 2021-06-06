@@ -11,6 +11,7 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.model.IspResponse;
 import com.maxmind.geoip2.record.City;
+import com.maxmind.geoip2.record.Continent;
 import com.maxmind.geoip2.record.Country;
 import com.maxmind.geoip2.record.Subdivision;
 
@@ -57,12 +58,15 @@ public class MaxmindGeolocationDatabase
             Optional.ofNullable(response.getMostSpecificSubdivision())
                     .map(Subdivision::getName)
                     .ifPresent(builder::setStateprov);
+            Optional.ofNullable(response.getMostSpecificSubdivision())
+                    .map(Subdivision::getIsoCode)
+                    .ifPresent(builder::setStateprovCode);
             Optional.ofNullable(response.getCity())
                     .map(City::getName)
                     .ifPresent(builder::setCity);
-            Optional.ofNullable(response.getCity())
-                    .map(City::getName)
-                    .ifPresent(builder::setCity);
+            Optional.ofNullable(response.getContinent())
+                    .map(Continent::getCode)
+                    .ifPresent(builder::setContinent);
 
             Optional.ofNullable(response.getLocation())
                     .ifPresent(

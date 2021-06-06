@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.5</version>
+        <version>2.5.0</version>
     </parent>
 
     <licenses>
@@ -65,8 +65,6 @@
         <maven.deploy.skip>true</maven.deploy.skip>
 
         <start-class>com.s24.geoip.GeoIpApi</start-class>
-        <graalvm.version>21.1.0</graalvm.version>
-        <spring.native.version>0.9.2</spring.native.version>
     </properties>
 
     <!-- for spring-graal-native -->
@@ -99,19 +97,11 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>30.1-jre</version>
+            <version>30.1.1-jre</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <!--
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-            -->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -120,22 +110,6 @@
         <dependency>
 	        <groupId>io.micrometer</groupId>
 	        <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
-        <!--
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>org.springframework.experimental</groupId>
-            <artifactId>spring-native</artifactId>
-            <version>${spring.native.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-indexer</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.maxmind.geoip2</groupId>
@@ -157,33 +131,10 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.springframework.experimental</groupId>
-                <artifactId>spring-aot-maven-plugin</artifactId>
-                <version>${spring.native.version}</version>
-                <executions>
-                    <execution>
-                        <id>test-generate</id>
-                        <goals>
-                            <goal>test-generate</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>generate</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 
     <profiles>
@@ -197,10 +148,10 @@
                         <version>${graalvm.version}</version>
                         <configuration>
                             <buildArgs>
-                                -J-Xmx4G 
+                                -J-Xmx4G
                                 -H:+ReportExceptionStackTraces
                                 -H:ReflectionConfigurationFiles=classes/META-INF/native-image/reflection-config.json
-                                -Dspring.graal.remove-unused-autoconfig=true 
+                                -Dspring.graal.remove-unused-autoconfig=true
                                 -Dspring.graal.remove-yaml-support=true
                             </buildArgs>
                             <imageName>${project.artifactId}</imageName>
