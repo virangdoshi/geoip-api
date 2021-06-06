@@ -81,4 +81,4 @@ jobs:
         push: false
         build-args: |
           MAXMIND_LICENSE_KEY=${{ secrets.MAXMIND_LICENSE_KEY }}
-          LOCAL_REGISTRY=localhost:5000/
+          LOCAL_REGISTRY=localhost:5000

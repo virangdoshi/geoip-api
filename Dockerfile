@@ -1,3 +1,6 @@
+ARG MAXMIND_LICENSE_KEY
+ARG LOCAL_REGISTRY
+
 # download stage
 FROM debian:buster-slim AS downloader
 ARG MAXMIND_LICENSE_KEY
@@ -10,7 +13,7 @@ RUN apt-get update && \
     echo "wurst"
 
 # Extend existing native image
+FROM ${LOCAL_REGISTRY}/observabilitystack/geoip-api:0-SNAPSHOT
 ARG LOCAL_REGISTRY
-FROM ${LOCAL_REGISTRY}observabilitystack/geoip-api:0-SNAPSHOT
 COPY --from=downloader "/srv/GeoLite2-City.mmdb" /srv/GeoLite2-City.mmdb
 ENV CITY_DB_FILE /srv/GeoLite2-City.mmdb
