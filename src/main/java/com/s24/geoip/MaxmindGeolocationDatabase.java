@@ -18,8 +18,7 @@ import com.maxmind.geoip2.record.Subdivision;
 /**
  * Implements {@code GeolocationProvider} by using the Maxmind GeoIP database.
  */
-public class MaxmindGeolocationDatabase
-    implements GeolocationProvider {
+public class MaxmindGeolocationDatabase implements GeolocationProvider {
 
     private final DatabaseReader cityDatabaseReader;
 
