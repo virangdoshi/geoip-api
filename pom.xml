@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.4</version>
+        <version>2.5.5</version>
     </parent>
 
     <licenses>
@@ -67,14 +67,9 @@
         <start-class>com.s24.geoip.GeoIpApi</start-class>
     </properties>
 
-    <!-- for spring-graal-native -->
+    <!-- for spring-native -->
     <repositories>
 		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-		</repository>
-        <repository>
             <id>spring-release</id>
             <name>Spring release</name>
             <url>https://repo.spring.io/release</url>
@@ -82,15 +77,10 @@
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>spring-release</id>
+            <id>spring-release</id>
             <name>Spring release</name>
             <url>https://repo.spring.io/release</url>
-		</pluginRepository>
+        </pluginRepository>
 	</pluginRepositories>
 
     <dependencies>
