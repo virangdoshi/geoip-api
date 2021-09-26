@@ -1,5 +1,5 @@
 # build stage
-FROM maven:3.8.2-jdk-11-slim AS builder
+FROM maven:3.8.2-openjdk-17-slim AS builder
 
 ADD . /build
 WORKDIR /build
@@ -9,13 +9,13 @@ RUN mvn --batch-mode --no-transfer-progress clean package -DskipTests=true  && \
     mv target/geoip-api-*.jar target/geoip-api.jar
 
 # run stage
-FROM adoptopenjdk:11-jre-hotspot-focal
+FROM openjdk:17-jdk-slim
 ARG MAXMIND_LICENSE_KEY
 
 # download current maxmind databases
 WORKDIR /srv
-#RUN apk add curl && \
-RUN curl -sfSL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&suffix=tar.gz&license_key=${MAXMIND_LICENSE_KEY}" | tar -xz && \
+RUN apt-get update && apt-get -y install curl && \
+    curl -sfSL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&suffix=tar.gz&license_key=${MAXMIND_LICENSE_KEY}" | tar -xz && \
     ln -s GeoLite2-City_*/GeoLite2-City.mmdb .
 
 # place app

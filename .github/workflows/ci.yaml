@@ -18,8 +18,8 @@ jobs:
     - name: Set up Java
       uses: actions/setup-java@v2
       with:
-        java-version: 11
-        distribution: adopt
+        java-version: 17
+        distribution: temurin
 
     - name: Build JAR from Maven
       run: mvn --batch-mode --no-transfer-progress  clean verify -Drevisison=$(date +%Y-%V)
