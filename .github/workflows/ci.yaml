@@ -28,7 +28,6 @@ jobs:
   native:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ secrets.DOCKER_PASSWORD != null }}
     steps:
 
     - name: Set up QEMU
