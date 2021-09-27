@@ -177,10 +177,15 @@
                                 <phase>package</phase>
                             </execution>
                         </executions>
-                        <!--
                         <configuration>
+                            <buildArgs>
+                                -J-Xmx4G
+                                -H:+ReportExceptionStackTraces
+                                -H:ReflectionConfigurationFiles=classes/META-INF/native-image/reflection-config.json
+                                -Dspring.graal.remove-unused-autoconfig=true
+                                -Dspring.graal.remove-yaml-support=true
+                            </buildArgs>
                         </configuration>
-                        -->
                     </plugin>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
