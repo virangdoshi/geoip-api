@@ -28,6 +28,7 @@ jobs:
   native:
     needs: build
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
     steps:
 
     - name: Set up QEMU
