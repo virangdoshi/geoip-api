@@ -1,6 +1,12 @@
 name: geoip-api ci build
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+      - main
+      - feature/**
+  pull_request:
 
 jobs:
   build:
