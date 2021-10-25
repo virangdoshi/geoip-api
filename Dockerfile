@@ -1,5 +1,5 @@
 # build stage
-FROM maven:3.8.2-openjdk-17-slim AS builder
+FROM maven:3.8.3-openjdk-17-slim AS builder
 
 ADD . /build
 WORKDIR /build
