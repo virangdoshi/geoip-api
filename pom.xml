@@ -55,6 +55,7 @@
 
     <properties>
         <maven.compiler.release>11</maven.compiler.release>
+        <java.version>11</java.version>
         <revision>0-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
