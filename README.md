@@ -18,20 +18,41 @@ The Docker image available on Docker Hub comes with a recent [GeoLite2 city data
 $ docker run -p 8080:8080 observabilitystack/geoip-api:latest
 ```
 
-The containers on Docker Hub are tagged in _yyyy-MM_ 
-format. The most recent container is tagged as _latest_.
-
 > 💡 Although running containers tagged as _latest_ is
 > not recommended in production, for geoip-api we highly
 > recommend this to have the most up-to-data geoip
 > data.
+
+### Available tags & repositories
+
+The containers on Docker Hub are tagged in _yyyy-MM_
+format. The most recent container is tagged as _latest_.
+
+For faster startup times, you can use the _native_ build. That
+version of the project is not bundled with a JDK. The Java code
+is compiled into native code providing faster launch times and
+better overall performance.
+
+```
+$ docker run -p 8080:8080 observabilitystack/geoip-api:latest-native
+```
+
+> 💡 The native build will be the default build for this project
+> in the nearer future!
+
+All images are pushed into the _Github Docker Registry_ as well
+and can pulled from there:
+
+```
+$ docker run -p 8080:8080 observabilitystack/geoip-api:latest
+```
 
 ### More examples
 
 The [`examples`](examples/) folder contains examples how
 to run _geoip-api_ in Docker-Compose or Kubernetes.
 
-### Using a custom (commercial) database
+## Using a custom (commercial) database
 
 > ☝️ When running in production, using a commercial [Maxmind GeoIP2 City database](https://www.maxmind.com/en/geoip2-city) is highly recommeded due to it's increased
 precision and general data quality.
@@ -46,7 +67,7 @@ You can mount the database in _mmdb_ format into the container. The location of 
 
 ## Using the API
 
-When the container is running, you can query it via simple HTTP GET requests: 
+When the container is running, you can query it via simple HTTP GET requests:
 
 ```bash
 $ curl http://localhost:8080/8.8.8.8
@@ -56,7 +77,7 @@ $ curl http://localhost:8080/8.8.8.8
     "longitude":"-97.822"
     "timezone": "America/Chicago"
 }
-$ curl -s "http://localhost:8080/$(curl -s https://ifconfig.me/ip)" 
+$ curl -s "http://localhost:8080/$(curl -s https://ifconfig.me/ip)"
 {
     "country":"DE",
     "stateprov":"Hamburg",
@@ -67,6 +88,31 @@ $ curl -s "http://localhost:8080/$(curl -s https://ifconfig.me/ip)"
 }
 ```
 
+## Building the project
+
+The project is built through multi stage Docker builds. You need
+a valid Maxmind lincense key to download the Geoip2 database.
+
+```shell
+$ export MAXMIND_LICENSE_KEY=...
+$ docker build \
+    --build-arg MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY} \
+    -t geoip-api:latest .
+$ docker build \
+    --build-arg MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY} \
+    -t geoip-api:latest-native -f Dockerfile.native .
+```
+
+If you want to build (or test) a multi-platform build, use
+the [Docker Buildx extension](https://docs.docker.com/buildx/working-with-buildx/):
+
+```shell
+$ docker buildx create --use --name multi-platform
+$ docker buildx build \
+    --platform linux/amd64,linux/arm64 \
+    --build-arg MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY} \
+    -t geoip-api:latest-native -f Dockerfile.native .
+```
 
 ## Contributing
 
