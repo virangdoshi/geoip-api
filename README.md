@@ -2,6 +2,8 @@
 
 [![geoip-api ci build](https://github.com/observabilitystack/geoip-api/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/observabilitystack/geoip-api/actions/workflows/ci.yaml)
 [![docker-pulls](https://img.shields.io/docker/pulls/observabilitystack/geoip-api)](https://hub.docker.com/r/observabilitystack/geoip-api)
+![GitHub Release Date](https://img.shields.io/github/release-date/observabilitystack/geoip-api)
+![GitHub last commit](https://img.shields.io/github/last-commit/observabilitystack/geoip-api)
 ![apache license](https://img.shields.io/github/license/observabilitystack/geoip-api)
 
 > ♻️ this is the official and maintained fork of the original [@shopping24](https://github.com/shopping24) repository maintained by [@tboeghk](https://thiswayup.de).
