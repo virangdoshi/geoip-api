@@ -47,6 +47,7 @@ jobs:
         acs-report-enable: true
         fail-build: false
         debug: true
+        severity-cutoff: critical
 
     - name: Upload image scan report
       uses: github/codeql-action/upload-sarif@v1
