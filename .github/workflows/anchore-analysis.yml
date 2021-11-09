@@ -8,18 +8,18 @@ name: "Code Analysis: Anchore Container Scan"
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
-    paths:
-      - Dockerfile
-  pull_request:
-    branches:
-      - master
-    paths:
-      - Dockerfile
-  schedule:
-    - cron: '29 21 * * 1'
+#  push:
+#    branches:
+#      - master
+#    paths:
+#      - Dockerfile
+#  pull_request:
+#    branches:
+#      - master
+#    paths:
+#      - Dockerfile
+#  schedule:
+#    - cron: '29 21 * * 1'
 
 jobs:
   Anchore-Build-Scan:
