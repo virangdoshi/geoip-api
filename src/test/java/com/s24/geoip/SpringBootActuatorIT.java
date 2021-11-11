@@ -19,11 +19,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @AutoConfigureMetrics
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = GeoIpApi.class)
+@ActiveProfiles("test")
 public class SpringBootActuatorIT {
 
     @Autowired
@@ -48,7 +50,7 @@ public class SpringBootActuatorIT {
         ResponseEntity<String> response = restTemplate.getForEntity("/actuator/health", String.class, "invalid");
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
-    
+
     @Test
     public void testActuatorPrometheus() {
         ResponseEntity<String> response = restTemplate.getForEntity("/actuator/prometheus", String.class, "invalid");

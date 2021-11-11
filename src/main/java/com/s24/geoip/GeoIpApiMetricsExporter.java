@@ -7,12 +7,14 @@ import java.util.function.ToDoubleFunction;
 
 import com.maxmind.geoip2.DatabaseReader;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tags;
 
 @Component
+@Profile("!test")
 public class GeoIpApiMetricsExporter {
 
     public GeoIpApiMetricsExporter(MeterRegistry registry, Collection<DatabaseReader> databases) {
