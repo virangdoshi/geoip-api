@@ -3,6 +3,7 @@ FROM ghcr.io/graalvm/graalvm-ce:21.2.0 AS builder
 
 ARG MAVEN_VERSION=3.8.3
 ARG BASE_URL=https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries
+ARG VERSION=0-SNAPSHOT
 
 ADD . /build
 WORKDIR /build
@@ -15,11 +16,14 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
   && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
 # build image
-RUN mvn --batch-mode --no-transfer-progress clean package -Pnative -DskipTests=true
+RUN mvn --batch-mode --no-transfer-progress clean package -Pnative -DskipTests=true -Drevision=${VERSION}
 
 # run stage
 FROM oraclelinux:8-slim
 ARG MAXMIND_LICENSE_KEY
+ARG CREATED_AT
+ARG VERSION
+ARG GIT_REVISION
 
 # Add labels to identify release
 LABEL org.opencontainers.image.authors="Torsten B. Köster <tbk@thiswayup.de>" \

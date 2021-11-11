@@ -135,9 +135,11 @@ a valid Maxmind lincense key to download the Geoip2 database.
 $ export MAXMIND_LICENSE_KEY=...
 $ docker build \
     --build-arg MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY} \
+    --build-arg VERSION=$(date +%Y-%V) \
     -t geoip-api:latest .
 $ docker build \
     --build-arg MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY} \
+    --build-arg VERSION=$(date +%Y-%V) \
     -t geoip-api:latest-native -f Dockerfile.native .
 ```
 

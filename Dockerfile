@@ -1,11 +1,13 @@
 # build stage
 FROM maven:3.8.3-openjdk-17-slim AS builder
+ARG VERSION=0-SNAPSHOT
 
 ADD . /build
 WORKDIR /build
 
 # build image
-RUN mvn --batch-mode --no-transfer-progress clean package -DskipTests=true  && \
+RUN mvn --batch-mode --no-transfer-progress clean package \
+        -DskipTests=true -Drevision=${VERSION} && \
     mv target/geoip-api-*.jar target/geoip-api.jar
 
 # run stage
