@@ -1,0 +1,16 @@
+# This is a very basic Docker Compose
+# deployment.
+version: '2.4'
+
+services:
+  geoip:
+    image: geoip-api:latest
+    ports:
+      - 8081:8080
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/etc/nginx/templates
