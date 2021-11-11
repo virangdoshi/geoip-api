@@ -4,6 +4,7 @@ import com.s24.geoip.GeoIpEntry;
 import com.s24.geoip.GeolocationProvider;
 
 import java.net.InetAddress;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,9 +47,26 @@ public class GeoIpRestController {
         this.geolocations = requireNonNull(geolocations);
     }
 
-    @GetMapping({"/", "/favicon.ico", "/robots.txt"})
+    @GetMapping({"/favicon.ico", "/robots.txt"})
     public ResponseEntity<Void> handleKnownNotFounds() {
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<Void> handleHeader(@RequestHeader(name = GeoIpEntryHttpHeaders.X_GEOIP_ADDRESS, required = false) InetAddress address) {
+        if (address != null) {
+            Optional<GeoIpEntry> result = geolocations.lookup(address);
+
+            if (result.isPresent()) {
+                return ResponseEntity.noContent()
+                    .headers(new GeoIpEntryHttpHeaders(result.get()))
+                    .build();
+            } else {
+                return ResponseEntity.noContent().build();
+            }
+        }
+
+        return handleKnownNotFounds();
     }
 
     /**

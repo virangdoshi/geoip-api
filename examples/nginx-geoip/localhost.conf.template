@@ -1,0 +1,50 @@
+server {
+    listen 8080 default_server;
+    root   /usr/share/nginx/html;
+
+    # This uses the value in X-Forwarded-For as remote_addr
+    # that will be sent to the Geoip instance later
+    set_real_ip_from 192.168.0.0/16;
+    set_real_ip_from 172.16.0.0/12;
+    set_real_ip_from 10.0.0.0/8;
+    real_ip_header X-Forwarded-For;
+
+    # Make a subrequest to the /geoip handler defined below.
+    auth_request @geoip;
+
+    # Transfer header values returned from the auth_request into
+    # Nginx variables
+    auth_request_set $geoip_country $upstream_http_x_geoip_country;
+    auth_request_set $geoip_stateprov $upstream_http_x_geoip_stateprov;
+    auth_request_set $geoip_city $upstream_http_x_geoip_city;
+    auth_request_set $geoip_latitude $upstream_http_x_geoip_latitude;
+    auth_request_set $geoip_longitude $upstream_http_x_geoip_longitude;
+    auth_request_set $geoip_continent $upstream_http_x_geoip_continent;
+    auth_request_set $geoip_timezone $upstream_http_x_geoip_timezone;
+    auth_request_set $geoip_asn $upstream_http_x_geoip_asn;
+    auth_request_set $geoip_asnorganization $upstream_http_x_geoip_asnorganization;
+
+    # Use the variables we defined above to send header values back
+    # to the client. To send those values further to a downstream
+    # reverse proxy target, use proxy_set_header directive
+    add_header X-Geoip-Country $geoip_country always;
+    add_header X-Geoip-StateProv $geoip_stateprov always;
+    add_header X-Geoip-City $geoip_city always;
+    add_header X-Geoip-Latitude $geoip_latitude always;
+    add_header X-Geoip-Longitude $geoip_longitude always;
+    add_header X-Geoip-Continent $geoip_continent always;
+    add_header X-Geoip-Timezone $geoip_timezone always;
+    add_header X-Geoip-Asn $geoip_asn always;
+    add_header X-Geoip-AsnOrganization $geoip_asnorganization always;
+
+    # a internal handler for subrequest to the Geoip-Api. Populate
+    # the X-Geoip-Address with the clients ip address (retrieved from
+    # the X-Forwarded-For header)
+    location = @geoip {
+        internal;
+
+        proxy_pass http://geoip:8080/;
+        proxy_pass_request_body off;
+        proxy_set_header X-Geoip-Address $remote_addr;
+    }
+}

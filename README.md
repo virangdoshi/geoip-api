@@ -76,7 +76,8 @@ to run _geoip-api_ in Docker-Compose or Kubernetes.
 
 ## Using the API
 
-You can query the API via simple HTTP GET requests:
+The prefered way to query the API is via simple HTTP GET requests. Supply
+the ip address to resolve as path variable.
 
 ```bash
 $ curl -s http://localhost:8080/8.8.8.8
@@ -98,6 +99,26 @@ $ curl -s "http://localhost:8080/$(curl -s https://ifconfig.me/ip)"
   "continent": "EU",
   "timezone": "Europe/Berlin"
 }
+```
+
+### Querying by HTTP header
+
+The `X-Geoip-Address` header is an alternative way to query the api
+(as used in the [Nginx-Geoip example](examples/nginx-geoip/)). Here
+the address to resolve is supplied as header value. The geoip information
+is returned as header values as well. The return code is always `204`.
+
+
+```bash
+$ curl -sI -H "X-Geoip-Address: $(curl -s https://ifconfig.me/ip)" "http://localhost:8080/"
+HTTP/1.1 204
+X-Geoip-Country: DE
+X-Geoip-StateProv: Free and Hanseatic City of Hamburg
+X-Geoip-City: Hamburg
+X-Geoip-Latitude: 53.6042
+X-Geoip-Longitude: 10.0596
+X-Geoip-Continent: EU
+X-Geoip-Timezone: Europe/Berlin
 ```
 
 ## Building the project
