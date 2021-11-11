@@ -67,6 +67,7 @@ variables:
 | Variable | Description | Default value |
 | -------- | ----------- | ------------- |
 | CITY_DB_FILE | The location of the GeoIP2 City or GeoLite2 database file. | `/srv/GeoLite2-City.mmdb` |
+| ASN_DB_FILE | The location of the GeoIP2 ASN database file. | `/srv/GeoLite2-ASN.mmdb` |
 | ISP_DB_FILE | The location of the GeoIP2 ISP database file. | (none) |
 
 ### Examples
@@ -85,7 +86,9 @@ $ curl -s http://localhost:8080/8.8.8.8
   "latitude": "37.751",
   "longitude": "-97.822",
   "continent": "NA",
-  "timezone": "America/Chicago"
+  "timezone": "America/Chicago",
+  "asn": 15169,
+  "asnOrganization": "GOOGLE"
 }
 $ curl -s "http://localhost:8080/$(curl -s https://ifconfig.me/ip)"
 {
@@ -96,7 +99,9 @@ $ curl -s "http://localhost:8080/$(curl -s https://ifconfig.me/ip)"
   "latitude": "53.5742",
   "longitude": "10.0497",
   "continent": "EU",
-  "timezone": "Europe/Berlin"
+  "timezone": "Europe/Berlin",
+  "asn": 15943,
+  "asnOrganization": "wilhelm.tel GmbH"
 }
 ```
 

@@ -8,6 +8,7 @@ import java.util.Optional;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.AddressNotFoundException;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
+import com.maxmind.geoip2.model.AsnResponse;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.model.IspResponse;
 import com.maxmind.geoip2.record.City;
@@ -22,15 +23,16 @@ public class MaxmindGeolocationDatabase
     implements GeolocationProvider {
 
     private final DatabaseReader cityDatabaseReader;
-
+    private final DatabaseReader asnDatabaseReader;
     private final DatabaseReader ispDatabaseReader;
 
-    public MaxmindGeolocationDatabase(DatabaseReader cityDatabaseReader, DatabaseReader ispDatabaseReader) {
-        if (cityDatabaseReader == null && ispDatabaseReader == null) {
+    public MaxmindGeolocationDatabase(DatabaseReader cityDatabaseReader, DatabaseReader asnDatabaseReader, DatabaseReader ispDatabaseReader) {
+        if (cityDatabaseReader == null && ispDatabaseReader == null && asnDatabaseReader == null) {
             throw new IllegalArgumentException(
-                "At least one of cityDatabaseReader or ispDatabaseReader must be non-null");
+                "At least one of cityDatabaseReader, asnDatabaseReader, ispDatabaseReader must be non-null");
         }
         this.cityDatabaseReader = cityDatabaseReader;
+        this.asnDatabaseReader = asnDatabaseReader;
         this.ispDatabaseReader = ispDatabaseReader;
     }
 
@@ -38,8 +40,9 @@ public class MaxmindGeolocationDatabase
     public Optional<GeoIpEntry> lookup(InetAddress addr) {
         GeoIpEntry.Builder responseBuilder = new GeoIpEntry.Builder();
         boolean hasCityData = lookupCityData(addr, responseBuilder);
+        boolean hasAsnData = lookupAsnData(addr, responseBuilder);
         boolean hasIspData = lookupIspData(addr, responseBuilder);
-        if (hasCityData || hasIspData) {
+        if (hasCityData || hasIspData || hasAsnData) {
             return Optional.of(responseBuilder.build());
         }
         return Optional.empty();
@@ -110,7 +113,26 @@ public class MaxmindGeolocationDatabase
             // no ISP information found, this is not an error
             return false;
         } catch (IOException | GeoIp2Exception e) {
-            throw new LookupException("Could not lookup city of address " + addr, e);
+            throw new LookupException("Could not lookup ISP of address " + addr, e);
+        }
+    }
+
+    private boolean lookupAsnData(InetAddress addr, GeoIpEntry.Builder builder) {
+        if (asnDatabaseReader == null) {
+            return false;
+        }
+        try {
+            AsnResponse response = asnDatabaseReader.asn(addr);
+
+            builder.setAsn(response.getAutonomousSystemNumber())
+                   .setAsnOrganization(response.getAutonomousSystemOrganization());
+            return true;
+
+        } catch (AddressNotFoundException e) {
+            // no ASN information found, this is not an error
+            return false;
+        } catch (IOException | GeoIp2Exception e) {
+            throw new LookupException("Could not lookup ASN of address " + addr, e);
         }
     }
 }
