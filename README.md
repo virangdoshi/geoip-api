@@ -87,7 +87,6 @@ $ curl -s http://localhost:8080/8.8.8.8
   "continent": "NA",
   "timezone": "America/Chicago"
 }
-
 $ curl -s "http://localhost:8080/$(curl -s https://ifconfig.me/ip)"
 {
   "country": "DE",
