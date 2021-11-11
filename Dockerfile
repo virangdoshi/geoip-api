@@ -11,6 +11,19 @@ RUN mvn --batch-mode --no-transfer-progress clean package -DskipTests=true  && \
 # run stage
 FROM openjdk:17-jdk-slim
 ARG MAXMIND_LICENSE_KEY
+ARG CREATED_AT
+ARG VERSION
+ARG GIT_REVISION
+
+# Add labels to identify release
+LABEL org.opencontainers.image.authors="Torsten B. Köster <tbk@thiswayup.de>" \
+      org.opencontainers.image.url="https://github.com/observabilitystack/geoip-api" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      org.opencontainers.image.title="Geoip-API" \
+      org.opencontainers.image.description="A JSON REST API for Maxmind GeoIP databases" \
+      org.opencontainers.image.created="${CREATED_AT}" \
+      org.opencontainers.image.version="${VERSION}" \
+      org.opencontainers.image.revision="${GIT_REVISION}"
 
 # download current maxmind databases
 WORKDIR /srv
