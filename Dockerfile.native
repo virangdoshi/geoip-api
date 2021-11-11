@@ -25,12 +25,15 @@ ARG MAXMIND_LICENSE_KEY
 WORKDIR /srv
 RUN microdnf install -y tar gzip && \
     curl -sfSL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&suffix=tar.gz&license_key=${MAXMIND_LICENSE_KEY}" | tar -xz && \
-    ln -s GeoLite2-City_*/GeoLite2-City.mmdb .
+    curl -sfSL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-ASN&suffix=tar.gz&license_key=${MAXMIND_LICENSE_KEY}" | tar -xz && \
+    ln -s GeoLite2-City_*/GeoLite2-City.mmdb . && \
+    ln -s GeoLite2-ASN_*/GeoLite2-ASN.mmdb .
 
 # place app
 COPY --from=builder "/build/target/geoip-api" /srv/geoip-api
 
 ENV CITY_DB_FILE /srv/GeoLite2-City.mmdb
+ENV ASN_DB_FILE  /srv/GeoLite2-ASN.mmdb
 HEALTHCHECK --interval=5s --timeout=1s CMD curl -f http://localhost:8080/actuator/health
 EXPOSE 8080
 CMD exec /srv/geoip-api

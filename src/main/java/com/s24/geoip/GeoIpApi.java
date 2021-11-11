@@ -29,16 +29,24 @@ public class GeoIpApi {
     @Bean
     public GeolocationProvider cityProvider(
             @Autowired(required = false) @Qualifier("cityDatabaseReader") DatabaseReader cityDatabaseReader,
+            @Autowired(required = false) @Qualifier("asnDatabaseReader") DatabaseReader asnDatabaseReader,
             @Autowired(required = false) @Qualifier("ispDatabaseReader") DatabaseReader ispDatabaseReader) {
-        if (cityDatabaseReader == null && ispDatabaseReader == null) {
-            throw new BeanInitializationException("Neither CITY_DB_FILE nor ISP_DB_FILE given");
+        if (cityDatabaseReader == null && ispDatabaseReader == null && asnDatabaseReader == null) {
+            throw new BeanInitializationException("Neither CITY_DB_FILE nor ASN_DB_FILE nor ISP_DB_FILE given");
         }
-        return new MaxmindGeolocationDatabase(cityDatabaseReader, ispDatabaseReader);
+
+        return new MaxmindGeolocationDatabase(cityDatabaseReader, asnDatabaseReader, ispDatabaseReader);
     }
 
     @Bean(name = "cityDatabaseReader")
     @ConditionalOnProperty("CITY_DB_FILE")
     public DatabaseReader cityDatabaseReader(@Value("${CITY_DB_FILE}") String dbFileName) throws IOException {
+        return buildDatabaseReader(dbFileName);
+    }
+
+    @Bean(name = "asnDatabaseReader")
+    @ConditionalOnProperty("ASN_DB_FILE")
+    public DatabaseReader asnDatabaseReader(@Value("${ASN_DB_FILE}") String dbFileName) throws IOException {
         return buildDatabaseReader(dbFileName);
     }
 

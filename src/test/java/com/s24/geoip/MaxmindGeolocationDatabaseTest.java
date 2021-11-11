@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.net.InetAddresses;
 import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.model.AsnResponse;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.model.IspResponse;
 import com.maxmind.geoip2.record.City;
@@ -31,8 +32,9 @@ import org.mockito.Mockito;
 public class MaxmindGeolocationDatabaseTest {
 
     private DatabaseReader cityDatabaseReader = Mockito.mock(DatabaseReader.class);
+    private DatabaseReader asnDatabaseReader = Mockito.mock(DatabaseReader.class);
     private DatabaseReader ispDatabaseReader = Mockito.mock(DatabaseReader.class);
-    private MaxmindGeolocationDatabase db = new MaxmindGeolocationDatabase(cityDatabaseReader, ispDatabaseReader);
+    private MaxmindGeolocationDatabase db = new MaxmindGeolocationDatabase(cityDatabaseReader, asnDatabaseReader, ispDatabaseReader);
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -50,7 +52,9 @@ public class MaxmindGeolocationDatabaseTest {
                 Lists.newArrayList(new Subdivision(locales, 0, 0, "DE", ImmutableMap.of("DE", "Hamburg"))),
                 new Traits());
         IspResponse ispResponse = new IspResponse(64512, "private use range", "192.168.1.1", "local network", "foobar");
+        AsnResponse asnResponse = new AsnResponse(64513, "private use range", "192.168.1.1");
         when(cityDatabaseReader.city(any(InetAddress.class))).thenReturn(cityResponse);
+        when(asnDatabaseReader.asn(any(InetAddress.class))).thenReturn(asnResponse);
         when(ispDatabaseReader.isp(any(InetAddress.class))).thenReturn(ispResponse);
     }
 
@@ -100,7 +104,7 @@ public class MaxmindGeolocationDatabaseTest {
 
     @Test
     public void testDatabaseWithOnlyCityDatabase() {
-        db = new MaxmindGeolocationDatabase(cityDatabaseReader, null);
+        db = new MaxmindGeolocationDatabase(cityDatabaseReader, null, null);
         Optional<GeoIpEntry> result= db.lookup(InetAddresses.forString("192.168.1.1"));
         assertThat(result).isPresent();
         GeoIpEntry geoIpEntry = result.get();
@@ -120,7 +124,7 @@ public class MaxmindGeolocationDatabaseTest {
 
     @Test
     public void testDatabaseWithOnlyIspDatabase() {
-        db = new MaxmindGeolocationDatabase(null, ispDatabaseReader);
+        db = new MaxmindGeolocationDatabase(null, null, ispDatabaseReader);
         Optional<GeoIpEntry> result = db.lookup(InetAddresses.forString("192.168.1.1"));
         assertThat(result).isPresent();
         GeoIpEntry geoIpEntry = result.get();
@@ -134,6 +138,25 @@ public class MaxmindGeolocationDatabaseTest {
         assertThat(geoIpEntry.getIsp()).isEqualTo("local network");
         assertThat(geoIpEntry.getOrganization()).isEqualTo("foobar");
         assertThat(geoIpEntry.getAsn()).isEqualTo(Integer.valueOf(64512));
+        assertThat(geoIpEntry.getAsnOrganization()).isEqualTo("private use range");
+    }
+
+    @Test
+    public void testDatabaseWithOnlyAsnDatabase() {
+        db = new MaxmindGeolocationDatabase(null, asnDatabaseReader, null);
+        Optional<GeoIpEntry> result = db.lookup(InetAddresses.forString("192.168.1.1"));
+        assertThat(result).isPresent();
+        GeoIpEntry geoIpEntry = result.get();
+        assertThat(geoIpEntry.getCountry()).isNull();
+        assertThat(geoIpEntry.getStateprov()).isNull();
+        assertThat(geoIpEntry.getCity()).isNull();
+        assertThat(geoIpEntry.getContinent()).isNull();
+        assertThat(geoIpEntry.getLatitude()).isNull();
+        assertThat(geoIpEntry.getLongitude()).isNull();
+        assertThat(geoIpEntry.getTimezone()).isNull();
+        assertThat(geoIpEntry.getIsp()).isNull();
+        assertThat(geoIpEntry.getOrganization()).isNull();
+        assertThat(geoIpEntry.getAsn()).isEqualTo(Integer.valueOf(64513));
         assertThat(geoIpEntry.getAsnOrganization()).isEqualTo("private use range");
     }
 }
