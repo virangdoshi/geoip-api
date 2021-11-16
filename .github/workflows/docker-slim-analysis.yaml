@@ -22,7 +22,7 @@ jobs:
     - id: docker-slim
       name: Run Docker Slim
       run: |
-        docker run -it --rm \
+        docker run --rm \
           -v /var/run/docker.sock:/var/run/docker.sock \
           dslim/docker-slim:1.37.0 \
           build --pull ghcr.io/observabilitystack/geoip-api:latest
