@@ -3,7 +3,6 @@ package com.s24.geoip;
 import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import java.util.function.ToDoubleFunction;
 
 import com.maxmind.geoip2.DatabaseReader;
 

@@ -182,7 +182,6 @@
                             <buildArgs>
                                 -J-Xmx4G
                                 -H:+ReportExceptionStackTraces
-                                -H:ReflectionConfigurationFiles=classes/META-INF/native-image/reflection-config.json
                                 -Dspring.graal.remove-unused-autoconfig=true
                                 -Dspring.graal.remove-yaml-support=true
                             </buildArgs>

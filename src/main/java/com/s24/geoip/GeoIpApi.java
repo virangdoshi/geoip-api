@@ -11,12 +11,35 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.nativex.hint.TypeHint;
 
 import com.maxmind.db.CHMCache;
+import com.maxmind.db.Metadata;
+import com.maxmind.db.Network;
 import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.NetworkDeserializer;
+import com.maxmind.geoip2.model.AsnResponse;
+import com.maxmind.geoip2.model.CityResponse;
+import com.maxmind.geoip2.model.IspResponse;
+import com.maxmind.geoip2.record.City;
+import com.maxmind.geoip2.record.Continent;
+import com.maxmind.geoip2.record.Country;
+import com.maxmind.geoip2.record.Location;
+import com.maxmind.geoip2.record.Postal;
+import com.maxmind.geoip2.record.RepresentedCountry;
+import com.maxmind.geoip2.record.Subdivision;
+import com.maxmind.geoip2.record.Traits;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@TypeHint(typeNames = "org.springframework.context.annotation.ProfileCondition",
+    types={
+        GeoIpEntry.class, CityResponse.class, City.class, Continent.class,
+        Location.class, Postal.class, Country.class, RepresentedCountry.class,
+        Subdivision.class, Traits.class, NetworkDeserializer.class, Metadata.class,
+        AsnResponse.class, Network.class, IspResponse.class
+    })
 @SpringBootApplication(proxyBeanMethods = false)
 public class GeoIpApi {
 
