@@ -37,23 +37,6 @@ jobs:
       name: Determine build date
       run: echo "::set-output name=date::$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
-    - name: Build and push to DockerHub registry
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        platforms: linux/amd64,linux/arm64
-        push: true
-        build-args: |
-          MAXMIND_LICENSE_KEY=${{ secrets.MAXMIND_LICENSE_KEY }}
-          CREATED_AT=${{ steps.build-date.outputs.date }}
-          VERSION=${{ steps.determine-tag.outputs.tag }}
-          GIT_REVISION=${{ github.sha }}
-        tags: |
-          observabilitystack/geoip-api:${{ steps.determine-tag.outputs.tag }}
-          observabilitystack/geoip-api:latest
-          ghcr.io/observabilitystack/geoip-api:${{ steps.determine-tag.outputs.tag }}
-          ghcr.io/observabilitystack/geoip-api:latest
-
     - name: Build and push native image to DockerHub registry
       uses: docker/build-push-action@v2
       with:
@@ -71,6 +54,23 @@ jobs:
           observabilitystack/geoip-api:latest-native
           ghcr.io/observabilitystack/geoip-api:${{ steps.determine-tag.outputs.tag }}-native
           ghcr.io/observabilitystack/geoip-api:latest-native
+
+    - name: Build and push to DockerHub registry
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        build-args: |
+          MAXMIND_LICENSE_KEY=${{ secrets.MAXMIND_LICENSE_KEY }}
+          CREATED_AT=${{ steps.build-date.outputs.date }}
+          VERSION=${{ steps.determine-tag.outputs.tag }}
+          GIT_REVISION=${{ github.sha }}
+        tags: |
+          observabilitystack/geoip-api:${{ steps.determine-tag.outputs.tag }}
+          observabilitystack/geoip-api:latest
+          ghcr.io/observabilitystack/geoip-api:${{ steps.determine-tag.outputs.tag }}
+          ghcr.io/observabilitystack/geoip-api:latest
 
     - name: Create Release
       uses: actions/create-release@v1
