@@ -73,14 +73,11 @@ jobs:
           ghcr.io/observabilitystack/geoip-api:latest
 
     - name: Create Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: ncipollo/release-action@v1
       with:
-        tag_name: ${{ steps.determine-tag.outputs.tag }}
-        release_name: ${{ steps.determine-tag.outputs.tag }}
+        tag: ${{ steps.determine-tag.outputs.tag }}
         body: |
           Weekly release with updated geoip information
           as of week ${{ steps.determine-tag.outputs.tag }}.
-        draft: false
-        prerelease: false
+        allowUpdates: true
+        token: ${{ secrets.GITHUB_TOKEN }}
