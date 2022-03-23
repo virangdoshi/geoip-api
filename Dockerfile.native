@@ -1,7 +1,7 @@
 # build stage
 FROM ghcr.io/graalvm/graalvm-ce:21.2.0 AS builder
 
-ARG MAVEN_VERSION=3.8.4
+ARG MAVEN_VERSION=3.8.5
 ARG BASE_URL=https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries
 ARG VERSION=0-SNAPSHOT
 
