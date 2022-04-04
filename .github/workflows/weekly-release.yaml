@@ -110,9 +110,11 @@ jobs:
     needs: build-latest
     steps:
 
-    - id: build-date
-      name: Determine build date
-      run: echo "::set-output name=date::$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+    - uses: actions/checkout@v2
+
+    - id: determine-tag
+      name: Determine Docker tag
+      run: echo "::set-output name=tag::$(date +%Y-%V)"
 
     - name: Create Release
       uses: ncipollo/release-action@v1
