@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.6</version>
+        <version>2.5.11</version>
     </parent>
 
     <licenses>
@@ -65,6 +65,9 @@
         <maven.deploy.skip>true</maven.deploy.skip>
 
         <start-class>com.s24.geoip.GeoIpApi</start-class>
+
+        <!-- We cannot jump on the 0.11 release train for now -->
+        <spring-native.version>0.10.6</spring-native.version>
     </properties>
 
     <!-- for spring-native -->
@@ -111,7 +114,7 @@
         <dependency>
             <groupId>org.springframework.experimental</groupId>
             <artifactId>spring-native</artifactId>
-            <version>0.10.5</version>
+            <version>${spring-native.version}</version>
         </dependency>
 
         <!-- test dependencies -->
@@ -142,7 +145,7 @@
                     <plugin>
                         <groupId>org.springframework.experimental</groupId>
                         <artifactId>spring-aot-maven-plugin</artifactId>
-                        <version>0.10.5</version>
+                        <version>${spring-native.version}</version>
                         <executions>
                             <execution>
                                 <id>test-generate</id>
@@ -161,7 +164,8 @@
                     <plugin>
                         <groupId>org.graalvm.buildtools</groupId>
                         <artifactId>native-maven-plugin</artifactId>
-                        <version>0.9.7.1</version>
+                        <!-- latest possible version is 0.9.9 -->
+                        <version>0.9.9</version>
                         <executions>
                             <execution>
                                 <id>test-native</id>
